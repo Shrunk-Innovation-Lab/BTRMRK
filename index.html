@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BTRMRK SKU Assessment</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="brand">BTRMRK</div>
+      <div class="subtitle">SKU Product Assessment</div>
+    </div>
+    <div class="score-badge">
+      <span class="score-label">CURRENT SCORE</span>
+      <strong id="publicScore">0 / 5</strong>
+      <span id="scoreState">Not yet assessed</span>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="card product-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">PRODUCT RECORD</p>
+          <h1>Assess one SKU across its full supply chain</h1>
+        </div>
+        <button class="secondary-btn" id="resetBtn" type="button">Reset</button>
+      </div>
+
+      <div class="grid three">
+        <label>
+          SKU / Product Code
+          <input id="sku" type="text" placeholder="e.g. MM-HTW-250" />
+        </label>
+        <label>
+          Product Name
+          <input id="productName" type="text" placeholder="e.g. Herbal Tonic Water 250 mL" />
+        </label>
+        <label>
+          Primary Market
+          <input id="market" type="text" placeholder="e.g. Hong Kong" />
+        </label>
+      </div>
+
+      <div class="grid two">
+        <label>
+          Manufacturer
+          <input id="manufacturerName" type="text" placeholder="Manufacturer legal / trading name" />
+        </label>
+        <label>
+          Distributor
+          <input id="distributorName" type="text" placeholder="Distributor legal / trading name" />
+        </label>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <div class="pillar-summary" data-pillar="materials">
+        <span>MATERIALS</span><strong>0 / 5</strong>
+      </div>
+      <div class="pillar-summary" data-pillar="method">
+        <span>METHOD</span><strong>0 / 5</strong>
+      </div>
+      <div class="pillar-summary" data-pillar="makers">
+        <span>MAKERS</span><strong>0 / 5</strong>
+      </div>
+      <div class="pillar-summary" data-pillar="journey">
+        <span>JOURNEY</span><strong>0 / 5</strong>
+      </div>
+      <div class="pillar-summary" data-pillar="after">
+        <span>AFTER</span><strong>0 / 5</strong>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="manufacturer" type="button">Manufacturer Assessment</button>
+        <button class="tab" data-tab="distributor" type="button">Distributor Assessment</button>
+        <button class="tab" data-tab="review" type="button">Combined Review</button>
+      </div>
+
+      <div id="manufacturer" class="tab-panel active"></div>
+      <div id="distributor" class="tab-panel"></div>
+      <div id="review" class="tab-panel"></div>
+    </section>
+  </main>
+
+  <template id="questionTemplate">
+    <article class="question">
+      <div class="question-top">
+        <div>
+          <div class="question-code"></div>
+          <h3 class="question-text"></h3>
+          <p class="question-help"></p>
+        </div>
+        <div class="points-wrap">
+          <label>Score</label>
+          <select class="question-score">
+            <option value="0">0</option>
+            <option value="0.5">0.5</option>
+            <option value="1">1</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="evidence-box">
+        <label>Required evidence</label>
+        <div class="required-evidence"></div>
+        <textarea class="evidence-notes" rows="2" placeholder="Record document name, certificate, invoice, audit reference, URL, or evidence note"></textarea>
+        <div class="grid two compact">
+          <label>
+            Evidence status
+            <select class="evidence-status">
+              <option value="none">Not supplied</option>
+              <option value="partial">Partial</option>
+              <option value="verified">Verified</option>
+            </select>
+          </label>
+          <label>
+            Evidence reference
+            <input class="evidence-ref" type="text" placeholder="e.g. Supplier declaration 2026-04" />
+          </label>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
