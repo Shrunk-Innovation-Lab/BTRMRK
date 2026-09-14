@@ -1,592 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BTRMRK SKU Assessment</title>
-  <style>
-:root{
-  --bg:#f4f4f1;--card:#fff;--text:#151515;--muted:#6d6d69;--line:#d9d9d4;--soft:#ecece7;
-  --good:#1f6f43;--warn:#9b6a00;--bad:#9f3030;--radius:18px
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
-.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px 32px;background:rgba(244,244,241,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
-.brand{font-weight:900;letter-spacing:.13em;font-size:1.4rem}
-.subtitle{margin-top:4px;color:var(--muted);font-size:.9rem}
-.score-badge{min-width:210px;text-align:right}
-.score-label{display:block;color:var(--muted);font-size:.68rem;font-weight:800;letter-spacing:.12em}
-.score-badge strong{display:block;font-size:1.7rem;line-height:1.05}
-#scoreState{display:block;margin-top:5px;color:var(--muted);font-size:.8rem}
-.app-shell{max-width:1320px;margin:0 auto;padding:28px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 10px 35px rgba(0,0,0,.035)}
-.product-card{margin-bottom:18px}
-.section-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:22px}
-h1,h2,h3,p{margin-top:0}
-h1{margin-bottom:8px;font-size:clamp(1.4rem,2vw,2rem)}
-.intro{max-width:760px;margin-bottom:0;color:var(--muted);line-height:1.5}
-.eyebrow{margin-bottom:6px;color:var(--muted);font-size:.72rem;font-weight:800;letter-spacing:.14em}
-.grid{display:grid;gap:16px}
-.grid.three{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:16px}
-.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-label{display:block;font-size:.8rem;font-weight:750}
-input,select,textarea{width:100%;margin-top:7px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text);font:inherit}
-input:focus,select:focus,textarea:focus{outline:2px solid rgba(21,21,21,.14);border-color:#999}
-textarea{resize:vertical}
-.secondary-btn{border:1px solid var(--line);border-radius:10px;padding:9px 14px;background:#fff;color:var(--text);font-weight:750;cursor:pointer}
-.summary-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:18px}
-.pillar-summary{padding:16px;border-radius:14px;background:#111;color:#fff}
-.pillar-summary span{display:block;opacity:.7;font-size:.72rem;font-weight:800;letter-spacing:.11em}
-.pillar-summary strong{display:block;margin-top:5px;font-size:1.45rem}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.tab{border:0;border-radius:10px;padding:10px 14px;background:var(--soft);color:var(--text);font-weight:800;cursor:pointer}
-.tab.active{background:#111;color:#fff}
-.tab-panel{display:none}.tab-panel.active{display:block}
-.pillar-section{margin-bottom:30px}
-.pillar-title{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #111}
-.pillar-title h2{margin:0;font-size:1.25rem}
-.pillar-title p{margin:0;color:var(--muted);font-size:.9rem}
-.question{margin-bottom:12px;padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff}
-.question-top{display:grid;grid-template-columns:1fr 90px;gap:18px}
-.question-code{margin-bottom:6px;color:var(--muted);font-size:.72rem;font-weight:900;letter-spacing:.1em}
-.question-text{margin-bottom:6px;font-size:1rem}
-.question-help{margin-bottom:0;color:var(--muted);font-size:.88rem;line-height:1.45}
-.auto-score{text-align:right}
-.auto-score span{display:block;color:var(--muted);font-size:.62rem;font-weight:850;letter-spacing:.08em}
-.auto-score strong{font-size:1.25rem}
-.response-box{margin-top:15px;padding-top:15px;border-top:1px solid var(--line)}
-.required-evidence-wrap{margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--soft)}
-.field-label{display:block;margin-bottom:5px;font-size:.72rem;font-weight:850;letter-spacing:.06em}
-.required-evidence{color:var(--muted);font-size:.86rem;line-height:1.45}
-.comments-label{margin-top:14px}
-.evidence-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
-.evidence-state{display:inline-block;padding:5px 8px;border-radius:999px;font-size:.72rem;font-weight:850}
-.evidence-none{background:#f7e8e8;color:var(--bad)}
-.evidence-present{background:#e8f3ec;color:var(--good)}
-.file-name{color:var(--muted);font-size:.78rem}
-.review-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
-.review-score{font-size:2.7rem;font-weight:900}
-.review-table{width:100%;margin-top:12px;border-collapse:collapse}
-.review-table th,.review-table td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-.review-table th{color:var(--muted);font-size:.75rem;letter-spacing:.08em}
-.notice{margin-top:18px;padding:14px 16px;border-radius:12px;background:var(--soft);color:var(--muted);font-size:.88rem;line-height:1.5}
-.recommendations{margin-top:28px}
-.recommendation-card{margin-bottom:12px;padding:16px;border:1px solid var(--line);border-radius:12px}
-.recommendation-card h3{margin-bottom:7px}
-.recommendation-card p{margin-bottom:8px;color:var(--muted);line-height:1.45}
-.recommendation-meta{font-size:.78rem;font-weight:800}
-.progress{height:9px;margin-top:10px;overflow:hidden;border-radius:999px;background:var(--soft)}
-.progress>div{height:100%;background:#111;width:0}
-@media(max-width:900px){
-  .grid.three,.grid.two,.summary-grid{grid-template-columns:1fr}
-  .summary-grid{grid-template-columns:repeat(2,1fr)}
-  .question-top{grid-template-columns:1fr}
-  .auto-score{text-align:left}.topbar{padding:16px}.app-shell{padding:16px}
-}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BTRMRK — under construction</title>
+<meta name="description" content="BTRMRK is building a simpler way to understand the impact behind the products you buy. Site under construction.">
+<meta name="robots" content="noindex">
 
+<!-- ============================================================
+     EDIT THESE THREE THINGS AND YOU'RE DONE:
+       1. the email address in the mailto: link near the bottom
+       2. the "Back in ..." line in the top rail
+       3. the accent colour --mark, if BTRMRK's brand colour differs
+     ============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:      #d7ded9;
+    --ink:        #16292c;
+    --ink-soft:   #4d6265;
+    --mark:       #e0006b;          /* surveyor's marking pink */
+    --grid-fine:  rgba(22,41,44,.05);
+    --grid-bold:  rgba(22,41,44,.16);
+    --rule:       2px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{ height:100%; }
+
+  body{
+    margin:0;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid-fine) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-fine) 1px, transparent 1px);
+    background-size: 24px 24px, 24px 24px;
+    background-position: -1px -1px;
+    background-attachment: fixed;
+    color:var(--ink);
+    font-family:"Archivo", "Helvetica Neue", Arial, sans-serif;
+    font-variation-settings:"wdth" 100,"wght" 400;
+    font-size:clamp(15px, 1.1vw + 12px, 18px);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- 3d terrain layers ---------- */
+  #bg{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    display:block;
+    pointer-events:none;
+  }
+  .veil{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    background:radial-gradient(
+      ellipse 58% 42% at 50% 46%,
+      rgba(215,222,217,.96) 0%,
+      rgba(215,222,217,.86) 42%,
+      rgba(215,222,217,0)   74%);
+  }
+
+  .sheet{
+    position:relative;
+    z-index:2;
+    min-height:100%;
+    display:grid;
+    grid-template-rows:auto 1fr auto;
+    padding:clamp(20px, 4vw, 56px);
+    gap:clamp(28px, 6vh, 64px);
+  }
+
+  /* ---------- top rail ---------- */
+  .rail{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:16px;
+    flex-wrap:wrap;
+    font-size:.82rem;
+    letter-spacing:.01em;
+    color:var(--ink-soft);
+    border-bottom:1px solid var(--grid-bold);
+    padding-bottom:10px;
+  }
+  .logotype{
+    font-variation-settings:"wdth" 112,"wght" 800;
+    font-size:1rem;
+    letter-spacing:-.01em;
+    color:var(--ink);
+  }
+
+  /* ---------- centre stack ---------- */
+  .stage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+
+  .headline{
+    margin:0;
+    max-width:15ch;
+    font-variation-settings:"wdth" 110,"wght" 800;
+    font-size:clamp(2.55rem, 10vw, 7.6rem);
+    line-height:.88;
+    letter-spacing:-.032em;
+    text-wrap:balance;
+  }
+
+  /* ruler datum under the headline */
+  .datum{
+    width:min(100%, 62ch);
+    margin:clamp(20px, 3.4vh, 40px) 0 clamp(22px, 3.4vh, 40px);
+    height:18px;
+    border-top:2px solid var(--ink);
+    background-image:linear-gradient(90deg, var(--ink) 2px, transparent 2px);
+    background-size:24px 9px;
+    background-repeat:repeat-x;
+    background-position:0 0;
+    opacity:.55;
+  }
+
+  .lede{
+    margin:0;
+    max-width:34ch;
+    font-size:clamp(1rem, .5vw + .92rem, 1.22rem);
+    color:var(--ink-soft);
+    text-wrap:balance;
+  }
+
+  .note{
+    margin:clamp(14px, 2vh, 22px) 0 0;
+    max-width:38ch;
+    font-size:.95rem;
+    color:var(--ink-soft);
+    text-wrap:balance;
+  }
+
+  .contact{
+    display:inline-block;
+    margin-top:clamp(18px, 2.6vh, 30px);
+    color:var(--ink);
+    font-variation-settings:"wdth" 100,"wght" 600;
+    font-size:1.02rem;
+    text-decoration:none;
+    border-bottom:2px solid var(--mark);
+    padding-bottom:3px;
+  }
+  .contact:hover{ color:var(--mark); }
+  .contact:focus-visible{
+    outline:2px solid var(--mark);
+    outline-offset:6px;
+    border-radius:2px;
+  }
+
+  /* ---------- footer ---------- */
+  .foot{
+    font-size:.78rem;
+    color:var(--ink-soft);
+    border-top:1px solid var(--grid-bold);
+    padding-top:10px;
+  }
+
+  /* ---------- one load sequence ---------- */
+  .headline{ opacity:0; animation:rise .62s cubic-bezier(.2,.7,.3,1) .12s forwards; }
+  .datum{ transform:scaleX(0); transform-origin:left; animation:sweep .72s cubic-bezier(.2,.7,.3,1) .4s forwards; }
+  .lede{ opacity:0; animation:rise .5s ease-out .62s forwards; }
+  .note{ opacity:0; animation:rise .5s ease-out .76s forwards; }
+  .contact{ opacity:0; animation:rise .5s ease-out .9s forwards; }
+
+  @keyframes rise{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+  @keyframes sweep{ to{ transform:scaleX(1); } }
+
+  @media (prefers-reduced-motion: reduce){
+    .headline,.datum,.lede,.note,.contact{
+      animation:none;
+      opacity:1;
+      transform:none;
+    }
+  }
 </style>
 </head>
 <body>
-  <header class="topbar">
-    <div>
-      <div class="brand">BTRMRK</div>
-      <div class="subtitle">SKU Product Assessment</div>
-    </div>
-    <div class="score-badge">
-      <span class="score-label">PRELIMINARY BTRMRK</span>
-      <strong id="publicScore">— / 5</strong>
-      <span id="scoreState">0% complete</span>
-    </div>
-  </header>
 
-  <main class="app-shell">
-    <section class="card product-card">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">PRODUCT RECORD</p>
-          <h1>Assess one SKU across its full supply chain</h1>
-          <p class="intro">Respondents do not select scores. BTRMRK automatically calculates a preliminary result from responses and supporting evidence.</p>
-        </div>
-        <button class="secondary-btn" id="resetBtn" type="button">Reset</button>
-      </div>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
 
-      <div class="grid three">
-        <label>SKU / Product Code<input id="sku" type="text" placeholder="e.g. MM-HTW-250" /></label>
-        <label>Product Name<input id="productName" type="text" placeholder="e.g. Herbal Tonic Water 250 mL" /></label>
-        <label>Primary Market<input id="market" type="text" placeholder="e.g. Hong Kong" /></label>
-      </div>
+<div class="sheet">
 
-      <div class="grid two">
-        <label>Manufacturer<input id="manufacturerName" type="text" placeholder="Manufacturer legal / trading name" /></label>
-        <label>Distributor<input id="distributorName" type="text" placeholder="Distributor legal / trading name" /></label>
-      </div>
-    </section>
+  <div class="rail">
+    <span class="logotype">BTRMRK</span>
+    <span>Under construction</span>
+  </div>
 
-    <section class="summary-grid">
-      <div class="pillar-summary" data-pillar="materials"><span>MATERIALS</span><strong>— / 5</strong></div>
-      <div class="pillar-summary" data-pillar="method"><span>METHOD</span><strong>— / 5</strong></div>
-      <div class="pillar-summary" data-pillar="makers"><span>MAKERS</span><strong>— / 5</strong></div>
-      <div class="pillar-summary" data-pillar="journey"><span>JOURNEY</span><strong>— / 5</strong></div>
-      <div class="pillar-summary" data-pillar="fate"><span>FATE</span><strong>— / 5</strong></div>
-    </section>
+  <main class="stage">
 
-    <section class="card">
-      <div class="tabs" role="tablist">
-        <button class="tab active" data-tab="manufacturer" type="button">Manufacturer Assessment</button>
-        <button class="tab" data-tab="distributor" type="button">Distributor Assessment</button>
-        <button class="tab" data-tab="review" type="button">Combined Review</button>
-      </div>
+    <h1 class="headline">SOMETHING BTR IS COMING.</h1>
 
-      <div id="manufacturer" class="tab-panel active"></div>
-      <div id="distributor" class="tab-panel"></div>
-      <div id="review" class="tab-panel"></div>
-    </section>
+    <div class="datum" aria-hidden="true"></div>
+
+    <p class="lede">We’re building a simpler way to understand the impact behind the products you buy.</p>
+
+    <p class="note">BTRMRK is currently under construction. Check back soon.</p>
+
+    <a class="contact" href="mailto:hello@btrmrk.com">hello@btrmrk.com</a>
+
   </main>
 
-  <template id="questionTemplate">
-    <article class="question">
-      <div class="question-top">
-        <div>
-          <div class="question-code"></div>
-          <h3 class="question-text"></h3>
-          <p class="question-help"></p>
-        </div>
-        <div class="auto-score"><span>PRELIM.</span><strong>—</strong></div>
-      </div>
+  <div class="foot">© 2026 BTRMRK</div>
 
-      <div class="response-box">
-        <div class="grid two">
-          <label>Response
-            <select class="response-select">
-              <option value="">Select response</option>
-              <option value="yes">Yes</option>
-              <option value="partial">Partly</option>
-              <option value="no">No</option>
-              <option value="na">Not applicable</option>
-            </select>
-          </label>
+</div>
 
-          <label>Evidence attachment
-            <input class="evidence-file" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp,.txt" />
-          </label>
-        </div>
+<script>
+/* Wireframe survey mesh: a ground plane in real perspective, drifting toward
+   the viewer. No libraries — the projection is eight lines of maths. */
+(function () {
+  var canvas = document.getElementById('bg');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
 
-        <div class="required-evidence-wrap">
-          <span class="field-label">Required evidence</span>
-          <div class="required-evidence"></div>
-        </div>
+  var COLS = 30,     // columns across
+      ROWS = 34,     // rows into the distance
+      XS   = 1.15,   // column spacing (world units)
+      ZS   = 1.0,    // row spacing
+      NEAR = 1.4,    // nearest row
+      EYE  = 1.55,   // camera height above the plane
+      SPEED = 0.55;  // world units per second, toward the viewer
 
-        <label class="comments-label">Response / evidence notes
-          <textarea class="response-notes" rows="3" placeholder="Add context, document reference, percentage, source, certificate number or explanation"></textarea>
-        </label>
+  var w = 0, h = 0, cx = 0, cy = 0, f = 0, raf = 0, t0 = 0;
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-        <div class="evidence-meta">
-          <span class="evidence-state evidence-none">No evidence attached</span>
-          <span class="file-name"></span>
-        </div>
-      </div>
-    </article>
-  </template>
-
-  <script>
-const pillars = {
-  materials: {
-    label: "MATERIALS", tagline: "What it's made from", owner: "manufacturer",
-    questions: [
-      ["M1","Are the principal materials or ingredients identified?","The product composition must be known.","BOM, ingredient specification, formulation or product specification."],
-      ["M2","Can the source or origin of principal materials be traced?","Key inputs should be traceable beyond the brand.","Supplier records, invoices, certificates of origin or supplier declarations."],
-      ["M3","Does the product use recycled content where technically appropriate?","Award only where a meaningful recycled-content claim is evidenced.","Supplier declaration, certificate or independently verified recycled-content percentage."],
-      ["M4","Are renewable or responsibly sourced materials used where relevant?","Relevant certifications or sourcing controls should support the claim.","FSC, PEFC, certified sourcing record, supplier certification or equivalent."],
-      ["M5","Have higher-impact materials been replaced with lower-impact alternatives?","There should be a documented reason for the improvement.","Previous/current specification, LCA, comparison study or design decision record."],
-      ["M6","Have unnecessary materials or components been eliminated?","Assess both product and packaging.","Current design specification and evidence of component reduction."],
-      ["M7","Has product or packaging material weight been optimised?","Lightweighting or right-sizing should be demonstrated.","Current/previous weight specs, benchmark or packaging optimisation record."],
-      ["M8","Are problematic substances or materials controlled or avoided?","Restrictions should be documented rather than assumed.","SDS register, restricted substances list, supplier compliance declaration or test result."],
-      ["M9","Is secondary and tertiary packaging minimised?","Assess cartons, films, dividers and pallets.","Packaging BOM, shipper specification or palletisation record."],
-      ["M10","Are material sustainability claims independently substantiated?","Higher confidence should come from stronger evidence.","Third-party certification, test report, EPD, LCA or independently verified supplier data."]
-    ]
-  },
-  method: {
-    label: "METHOD", tagline: "How it's made", owner: "manufacturer",
-    questions: [
-      ["MD1","Is the manufacturing facility identified?","The actual site making the SKU must be known.","Facility name/address, manufacturing agreement or purchase record."],
-      ["MD2","Is manufacturing energy consumption measured?","Energy should be measured for the relevant facility or process.","Electricity/fuel bills, submeter data or production energy records."],
-      ["MD3","Is energy efficiency actively managed?","Look for actions, targets and results.","Energy plan, project records, equipment upgrades or consumption trend."],
-      ["MD4","Is verified renewable electricity used?","Renewable claims must be evidenced.","Electricity contract, renewable certificate, PPA or on-site generation data."],
-      ["MD5","Is water consumption measured?","Where relevant to production.","Water bills, meter records or process logs."],
-      ["MD6","Are measures in place to reduce water consumption?","Improvements should be documented.","Project records, process changes, equipment specs or measured reduction."],
-      ["MD7","Is production waste measured?","Waste should be quantified, not described generally.","Waste reports, invoices, weighbridge data or internal records."],
-      ["MD8","Is production waste avoided, reused or recycled?","Award for demonstrated diversion or prevention.","Waste contractor reports, reuse logs or production-loss data."],
-      ["MD9","Are hazardous chemicals and emissions appropriately controlled?","Relevant environmental risks must be managed.","SDS register, permits, procedures, monitoring or compliance records."],
-      ["MD10","Is there a documented environmental management or improvement system?","Formal or equivalent systems may qualify.","ISO 14001, EMS, policy, objectives, audits and improvement records."]
-    ]
-  },
-  makers: {
-    label: "MAKERS", tagline: "Who makes it", owner: "manufacturer",
-    questions: [
-      ["MK1","Is the final manufacturer identified?","The legal or trading entity making the SKU should be known.","Manufacturing agreement, facility details or supplier master record."],
-      ["MK2","Are significant upstream suppliers identifiable?","Focus on material suppliers that materially influence the product.","Approved supplier list, purchase records or supply-chain map."],
-      ["MK3","Is compliance with applicable labour law evidenced?","Do not rely only on a generic policy.","Declaration plus payroll sample, audit report or legal compliance review."],
-      ["MK4","Are safe working conditions demonstrated?","The manufacturer should show active worker-safety management.","OHS/WHS policy, incident records, audit, ISO 45001 or equivalent."],
-      ["MK5","Are forced labour and child labour prohibited and controlled?","This is a critical BTRMRK criterion.","Supplier code, contracts, due-diligence procedure or modern-slavery controls."],
-      ["MK6","Are workers paid in accordance with legal wage requirements?","Evidence should cover the relevant facility/workforce.","Payroll sample, audit or independent certification."],
-      ["MK7","Are working hours and overtime appropriately controlled?","Where relevant to the manufacturing location.","Timesheets, HR policy or social audit."],
-      ["MK8","Can workers raise grievances safely?","There should be a credible mechanism.","Grievance policy, hotline/process and anonymised records."],
-      ["MK9","Are significant suppliers subject to responsible-sourcing requirements?","Standards should extend beyond the final factory.","Supplier code and signed supplier acknowledgement."],
-      ["MK10","Are labour or social claims independently checked?","Independent verification materially strengthens the score.","SMETA, SA8000, amfori BSCI or equivalent social audit/certification."]
-    ]
-  },
-  journey: {
-    label: "JOURNEY", tagline: "How it gets to you", owner: "distributor",
-    questions: [
-      ["J1","Are major material and ingredient origins known?","Distributor may rely on verified manufacturer evidence.","Supplier origin declarations, invoices or supply-chain map."],
-      ["J2","Is the final manufacturing location known?","The distributor must know where the SKU was produced.","Manufacturing record or supplier declaration."],
-      ["J3","Is the route from manufacturer to primary market documented?","The main freight route should be traceable.","Bills of lading, freight records, carrier reports or route map."],
-      ["J4","Is routine air freight avoided?","Emergency air freight should be distinguished from normal supply.","Freight invoices, carrier data or 12-month shipment summary."],
-      ["J5","Are lower-impact freight modes prioritised where practical?","Assess actual modal choice rather than policy alone.","Freight policy plus shipment records."],
-      ["J6","Are shipments consolidated to reduce unnecessary transport?","Look at order and container efficiency.","Container utilisation, shipment frequency or pallet consolidation records."],
-      ["J7","Is transport packaging optimised?","Assess cartons, void fill, wrap and palletisation.","Transport packaging spec, pallet plan or optimisation study."],
-      ["J8","Is local or regional sourcing used where it demonstrably reduces impact?","Local should not automatically earn a point.","Supplier locations plus comparison or evidence supporting the benefit."],
-      ["J9","Are distribution emissions measured?","Methodology should be defined and repeatable.","Carrier emissions report or documented freight-emissions calculation."],
-      ["J10","Is there evidence of ongoing transport-impact reduction?","Improvement should be measurable.","Year-on-year data, targets, route optimisation or mode-shift records."]
-    ]
-  },
-  fate: {
-    label: "FATE", tagline: "What happens next", owner: "distributor",
-    questions: [
-      ["F1","Is the intended end-of-use pathway defined?","The expected outcome should be clear for the target market.","Packaging/product specification and market disposal guidance."],
-      ["F2","Can the principal packaging or product realistically be recycled, reused, refilled or composted?","Technical possibility alone is not enough.","Recognised recyclability guidance, testing or recovery-system evidence."],
-      ["F3","Is that pathway available in the product's primary market?","Infrastructure must exist where the product is actually sold.","Council, regulator, DRS, recycler or collection-program evidence."],
-      ["F4","Can main components be easily separated where necessary?","Assess consumer effort and design.","Physical review, packaging drawings or design specification."],
-      ["F5","Are components compatible with the intended recovery stream?","Ink, labels, liners, closures and coatings may matter.","Recycler guidance, compatibility test or packaging assessment."],
-      ["F6","Are problematic end-of-life materials avoided?","Avoid components that commonly contaminate recovery streams.","Material specification or design-for-recycling review."],
-      ["F7","Are consumers clearly told what to do with the product or packaging?","Instructions should be specific to the market.","Final packaging artwork, disposal label or QR destination."],
-      ["F8","Does the design maximise material recovery?","Design should support the intended after-use pathway.","Design-for-recycling assessment or packaging review."],
-      ["F9","Is there an established collection or recovery system?","This can include kerbside, deposit return, take-back or refill.","Program documentation, contracts or recognised scheme details."],
-      ["F10","Is there evidence the claimed recovery pathway works in practice?","Prefer observed recovery evidence over theoretical claims.","Recovery data, recycler confirmation or independent assessment."]
-    ]
+  function resize() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width  = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    canvas.style.width  = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cx = w / 2;
+    cy = h * 0.44;                    // horizon
+    f  = Math.max(h, w * 0.62) * 1.15; // focal length
   }
-};
 
-const state = { manufacturer: {}, distributor: {}, meta: {} };
-const manufacturerContainer = document.getElementById("manufacturer");
-const distributorContainer = document.getElementById("distributor");
-const reviewContainer = document.getElementById("review");
-const template = document.getElementById("questionTemplate");
+  // Height field — three slow waves, no two in step.
+  function elevation(x, z, t) {
+    return Math.sin(x * 0.42 + z * 0.18 + t * 0.33) * 0.30
+         + Math.sin(z * 0.31 - t * 0.21)            * 0.22
+         + Math.sin(x * 0.19 - z * 0.26 + t * 0.14) * 0.16;
+  }
 
-function automaticQuestionScore(answer, hasEvidence) {
-  if (!answer || answer === "na") return null;
-  if (answer === "yes") return hasEvidence ? 1 : 0.5;
-  if (answer === "partial") return hasEvidence ? 0.5 : 0.25;
-  if (answer === "no") return 0;
-  return null;
-}
+  function draw(t) {
+    ctx.clearRect(0, 0, w, h);
 
-function renderPillar(key, pillar) {
-  const wrapper = document.createElement("section");
-  wrapper.className = "pillar-section";
-  wrapper.innerHTML = `
-    <div class="pillar-title">
-      <div><h2>${pillar.label}</h2><p>${pillar.tagline}</p></div>
-      <strong id="${key}-tab-score">— / 5</strong>
-    </div>`;
+    var scroll = t * SPEED;
+    var shift  = scroll % ZS;
 
-  pillar.questions.forEach(([code, question, help, evidence]) => {
-    const node = template.content.cloneNode(true);
-    const article = node.querySelector(".question");
-    article.dataset.code = code;
-    article.dataset.pillar = key;
-    article.dataset.owner = pillar.owner;
+    // Depth fade for free: lines are faint at the horizon, firm underfoot.
+    var fade = ctx.createLinearGradient(0, cy, 0, h);
+    fade.addColorStop(0,    'rgba(22,41,44,0)');
+    fade.addColorStop(0.28, 'rgba(22,41,44,0.07)');
+    fade.addColorStop(1,    'rgba(22,41,44,0.26)');
+    ctx.strokeStyle = fade;
+    ctx.lineWidth = 1;
 
-    node.querySelector(".question-code").textContent = code;
-    node.querySelector(".question-text").textContent = question;
-    node.querySelector(".question-help").textContent = help;
-    node.querySelector(".required-evidence").textContent = evidence;
+    var i, j, x, z, y, sx, sy, open;
 
-    const response = node.querySelector(".response-select");
-    const file = node.querySelector(".evidence-file");
-    const notes = node.querySelector(".response-notes");
-    const scoreDisplay = node.querySelector(".auto-score strong");
-    const evidenceState = node.querySelector(".evidence-state");
-    const fileName = node.querySelector(".file-name");
-
-    function save() {
-      const owner = pillar.owner;
-      const hasEvidence = file.files && file.files.length > 0;
-      const uploadedFileName = hasEvidence ? file.files[0].name : "";
-      const score = automaticQuestionScore(response.value, hasEvidence);
-
-      state[owner][code] = {
-        answer: response.value,
-        notes: notes.value,
-        hasEvidence,
-        fileName: uploadedFileName,
-        score,
-        pillar: key
-      };
-
-      scoreDisplay.textContent = score === null ? "—" : score.toFixed(score % 1 ? 2 : 0);
-
-      if (hasEvidence) {
-        evidenceState.textContent = "Evidence attached";
-        evidenceState.className = "evidence-state evidence-present";
-        fileName.textContent = uploadedFileName;
-      } else {
-        evidenceState.textContent = "No evidence attached";
-        evidenceState.className = "evidence-state evidence-none";
-        fileName.textContent = "";
+    // Rows running across
+    for (j = 0; j < ROWS; j++) {
+      z = NEAR + j * ZS - shift;
+      if (z < 0.4) continue;
+      ctx.beginPath();
+      for (i = 0; i <= COLS; i++) {
+        x  = (i - COLS / 2) * XS;
+        y  = elevation(x, z + scroll, t);
+        sx = cx + f * x / z;
+        sy = cy + f * (EYE - y) / z;
+        if (i) ctx.lineTo(sx, sy); else ctx.moveTo(sx, sy);
       }
-
-      calculate();
-      saveLocal();
+      ctx.stroke();
     }
 
-    response.addEventListener("change", save);
-    file.addEventListener("change", save);
-    notes.addEventListener("input", save);
-    wrapper.appendChild(node);
-  });
-
-  return wrapper;
-}
-
-Object.entries(pillars).forEach(([key, pillar]) => {
-  (pillar.owner === "manufacturer" ? manufacturerContainer : distributorContainer)
-    .appendChild(renderPillar(key, pillar));
-});
-
-function getItem(code, owner) {
-  return state[owner][code] || { answer:"", notes:"", hasEvidence:false, fileName:"", score:null };
-}
-
-function pillarScoreFive(key) {
-  const p = pillars[key];
-  const eligible = p.questions
-    .map(([code]) => getItem(code, p.owner))
-    .filter(item => item.answer && item.answer !== "na");
-
-  if (!eligible.length) return null;
-
-  const total = eligible.reduce((sum,item) => sum + (item.score ?? 0), 0);
-  return (total / eligible.length) * 5;
-}
-
-function roundToHalf(value) {
-  return Math.round(value * 2) / 2;
-}
-
-function completionStats() {
-  const all = [];
-  Object.values(pillars).forEach(p => p.questions.forEach(([code]) => all.push(getItem(code,p.owner))));
-  const answered = all.filter(i => i.answer).length;
-  return { answered, total: all.length, pct: Math.round((answered / all.length) * 100) };
-}
-
-function calculate() {
-  const pillarValues = [];
-
-  Object.keys(pillars).forEach(key => {
-    const value = pillarScoreFive(key);
-    if (value !== null) pillarValues.push(value);
-    const display = value === null ? "— / 5" : `${value.toFixed(1)} / 5`;
-
-    const summary = document.querySelector(`.pillar-summary[data-pillar="${key}"] strong`);
-    if (summary) summary.textContent = display;
-
-    const tabScore = document.getElementById(`${key}-tab-score`);
-    if (tabScore) tabScore.textContent = display;
-  });
-
-  const completion = completionStats();
-  document.getElementById("scoreState").textContent =
-    `${completion.pct}% complete · ${completion.answered}/${completion.total} answered`;
-
-  if (!pillarValues.length) {
-    document.getElementById("publicScore").textContent = "— / 5";
-    renderReview(null, null);
-    return;
+    // Columns running away
+    for (i = 0; i <= COLS; i++) {
+      x = (i - COLS / 2) * XS;
+      ctx.beginPath();
+      open = false;
+      for (j = 0; j < ROWS; j++) {
+        z = NEAR + j * ZS - shift;
+        if (z < 0.4) { open = false; continue; }
+        y  = elevation(x, z + scroll, t);
+        sx = cx + f * x / z;
+        sy = cy + f * (EYE - y) / z;
+        if (open) ctx.lineTo(sx, sy); else { ctx.moveTo(sx, sy); open = true; }
+      }
+      ctx.stroke();
+    }
   }
 
-  const exact = pillarValues.reduce((a,b)=>a+b,0) / pillarValues.length;
-  const publicScore = roundToHalf(exact);
-  document.getElementById("publicScore").textContent =
-    `${publicScore.toFixed(publicScore % 1 ? 1 : 0)} / 5`;
-
-  renderReview(exact, publicScore);
-}
-
-function recommendationCandidates() {
-  const out = [];
-
-  Object.entries(pillars).forEach(([pillarKey,p]) => {
-    p.questions.forEach(([code,question,help,evidence]) => {
-      const item = getItem(code,p.owner);
-      if (!item.answer || item.answer === "na") return;
-
-      const current = item.score ?? 0;
-      if (current >= 1) return;
-
-      let recommendation = "";
-      const potential = 1 - current;
-
-      if (item.answer === "no") {
-        recommendation = "This criterion is currently not met. Review whether the product, supplier or process can be changed so the requirement can be achieved and evidenced.";
-      } else if (item.answer === "partial") {
-        recommendation = item.hasEvidence
-          ? "You have partially met this criterion. Strengthen the underlying practice or coverage so the response can be fully demonstrated."
-          : "You have partially met this criterion, but no supporting evidence is attached. Improve the practice and provide evidence.";
-      } else if (item.answer === "yes" && !item.hasEvidence) {
-        recommendation = "You have answered Yes, but no evidence is attached. Supplying acceptable evidence would strengthen the preliminary result.";
-      }
-
-      out.push({pillar:p.label, code, question, evidence, current, potential, recommendation});
-    });
-  });
-
-  return out.sort((a,b)=>b.potential-a.potential);
-}
-
-function renderReview(exact, publicScore) {
-  const completion = completionStats();
-
-  const rows = Object.entries(pillars).map(([key,p]) => {
-    const value = pillarScoreFive(key);
-    const items = p.questions.map(([code]) => getItem(code,p.owner));
-    const answered = items.filter(i => i.answer).length;
-    const evidence = items.filter(i => i.hasEvidence).length;
-
-    return `
-      <tr>
-        <td><strong>${p.label}</strong><br><span style="color:#6d6d69">${p.owner === "manufacturer" ? "Manufacturer" : "Distributor"}</span></td>
-        <td>${answered} / ${p.questions.length}</td>
-        <td>${evidence} attachments</td>
-        <td>${value === null ? "—" : value.toFixed(1) + " / 5"}</td>
-      </tr>`;
-  }).join("");
-
-  const recommendations = recommendationCandidates();
-  const recommendationHtml = recommendations.length
-    ? recommendations.slice(0,10).map(r => `
-      <div class="recommendation-card">
-        <h3>${r.pillar} · ${r.code}</h3>
-        <p><strong>${escapeHtml(r.question)}</strong></p>
-        <p>${escapeHtml(r.recommendation)}</p>
-        <p><strong>Evidence to provide:</strong> ${escapeHtml(r.evidence)}</p>
-        <div class="recommendation-meta">Potential criterion uplift: +${r.potential.toFixed(2)}</div>
-      </div>`).join("")
-    : `<div class="notice">Complete more questions to generate targeted BTR NEXT recommendations.</div>`;
-
-  reviewContainer.innerHTML = `
-    <div class="review-header">
-      <div>
-        <p class="eyebrow">COMBINED SKU REVIEW</p>
-        <h2>${escapeHtml(document.getElementById("productName").value || "Unnamed product")}</h2>
-        <p>${escapeHtml(document.getElementById("sku").value || "No SKU entered")}</p>
-      </div>
-      <div class="review-score">${publicScore === null ? "— / 5" : publicScore.toFixed(publicScore % 1 ? 1 : 0) + " / 5"}</div>
-    </div>
-
-    <div>
-      <strong>Assessment completion: ${completion.pct}%</strong>
-      <div class="progress"><div style="width:${completion.pct}%"></div></div>
-    </div>
-
-    <table class="review-table">
-      <thead><tr><th>Pillar</th><th>Answered</th><th>Evidence</th><th>Preliminary score</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-
-    <div class="notice">
-      <strong>Preliminary only.</strong>
-      Respondents do not control any score. Scores are calculated automatically from the selected response and whether supporting evidence is attached.
-      An independent assessor should review the evidence before any BTRMRK rating is certified or used on packaging.
-      ${exact === null ? "" : `Current underlying score: ${exact.toFixed(2)} / 5. Public display rounds to the nearest 0.5.`}
-    </div>
-
-    <section class="recommendations">
-      <p class="eyebrow">BTR NEXT</p>
-      <h2>How to improve this SKU</h2>
-      ${recommendationHtml}
-    </section>`;
-}
-
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[c]));
-}
-
-document.querySelectorAll(".tab").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById(btn.dataset.tab).classList.add("active");
-  });
-});
-
-["sku","productName","market","manufacturerName","distributorName"].forEach(id => {
-  document.getElementById(id).addEventListener("input", e => {
-    state.meta[id] = e.target.value;
-    saveLocal();
-    calculate();
-  });
-});
-
-document.getElementById("resetBtn").addEventListener("click", () => {
-  if (!confirm("Reset the entire BTRMRK assessment for this SKU?")) return;
-  localStorage.removeItem("btrmrkAssessmentV3");
-  location.reload();
-});
-
-function saveLocal() {
-  localStorage.setItem("btrmrkAssessmentV3", JSON.stringify(state));
-}
-
-function loadLocal() {
-  const saved = localStorage.getItem("btrmrkAssessmentV3");
-  if (!saved) return;
-
-  try {
-    const parsed = JSON.parse(saved);
-    Object.assign(state, parsed);
-
-    Object.entries(state.meta || {}).forEach(([id,value]) => {
-      const el = document.getElementById(id);
-      if (el) el.value = value;
-    });
-
-    document.querySelectorAll(".question").forEach(article => {
-      const code = article.dataset.code;
-      const owner = article.dataset.owner;
-      const item = state[owner]?.[code];
-      if (!item) return;
-
-      const response = article.querySelector(".response-select");
-      const notes = article.querySelector(".response-notes");
-      const scoreDisplay = article.querySelector(".auto-score strong");
-      const evidenceState = article.querySelector(".evidence-state");
-      const fileName = article.querySelector(".file-name");
-
-      response.value = item.answer || "";
-      notes.value = item.notes || "";
-      scoreDisplay.textContent = item.score === null || item.score === undefined
-        ? "—"
-        : Number(item.score).toFixed(Number(item.score) % 1 ? 2 : 0);
-
-      if (item.hasEvidence && item.fileName) {
-        evidenceState.textContent = "Evidence previously selected";
-        evidenceState.className = "evidence-state evidence-present";
-        fileName.textContent = `${item.fileName} (re-attach after reload)`;
-      }
-    });
-  } catch (err) {
-    console.warn("Could not load saved BTRMRK assessment", err);
+  function frame(now) {
+    if (!t0) t0 = now;
+    draw((now - t0) / 1000);
+    raf = window.requestAnimationFrame(frame);
   }
-}
 
-loadLocal();
-calculate();
+  function play() {
+    if (raf || still.matches) return;
+    t0 = 0;
+    raf = window.requestAnimationFrame(frame);
+  }
+  function pause() {
+    if (!raf) return;
+    window.cancelAnimationFrame(raf);
+    raf = 0;
+  }
 
+  function start() {
+    resize();
+    if (still.matches) { pause(); draw(0); }
+    else play();
+  }
+
+  window.addEventListener('resize', function () {
+    resize();
+    if (still.matches || document.hidden) draw(0);
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    document.hidden ? pause() : play();
+  });
+
+  if (still.addEventListener) still.addEventListener('change', start);
+
+  start();
+})();
 </script>
+
 </body>
 </html>
