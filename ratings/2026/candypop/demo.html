@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Candy Pop Honey Citrus Shower Gel 350 mL — BTRMRK rating</title>
+<meta name="description" content="An independently verified BTRMRK product rating: how it was made, who made it, how it reached you, and what to do with the pack.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ---------------------------------------------------------------
+   BTRMRK public rating page
+   Tokens
+   --------------------------------------------------------------- */
+:root {
+  --ink:        #16161b;
+  --ink-2:      #1e1e24;
+  --ink-line:   #2b2b32;
+  --paper:      #f4f4f6;
+  --paper-2:    #e8e8ed;
+  --paper-3:    #e5e5ea;
+  --white:      #ffffff;
+  --line:       #e2e2e7;
+  --line-2:     #d6d6dd;
+
+  --text:       #16161b;
+  --text-2:     #3c3c43;
+  --text-3:     #54545e;
+  --muted:      #616169;
+  --on-ink:     #f4f4f6;
+  --on-ink-2:   rgba(245,244,240,.82);
+  --on-ink-3:   rgba(245,244,240,.62);
+
+  --green:      #2e6b46;
+  --green-soft: #8fae9b;
+  --green-bg:   #e7f1ea;
+  --green-bd:   #cfe0d5;
+  --amber:      #8a6a12;
+  --amber-bg:   #fbf1dd;
+  --amber-bd:   #e8dcc0;
+  --red:        #9a3535;
+  --red-bg:     #fbeeee;
+  --red-bd:     #e2c9c9;
+
+  --sans:  'Public Sans', system-ui, -apple-system, sans-serif;
+  --display:'Archivo', var(--sans);
+  --mono:  'IBM Plex Mono', ui-monospace, monospace;
+
+  --r-sm: 11px;
+  --r-md: 16px;
+  --r-lg: 20px;
+  --r-pill: 99px;
+
+  --pad: clamp(20px, 5vw, 44px);
+  --tap: 44px;
+}
+
+/* ---------------------------------------------------------------
+   Reset
+   --------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
+h1, h2, h3, p { margin: 0; }
+a { color: var(--green); text-decoration: none; }
+a:hover { color: var(--ink); }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
+
+/* thin scrollbar that does not claim layout width */
+@supports not selector(::-webkit-scrollbar) {
+  * { scrollbar-width: thin; scrollbar-color: #c6c6cc transparent; }
+}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c6c6cc; border-radius: 8px; }
+
+/* ---------------------------------------------------------------
+   Shared bits
+   --------------------------------------------------------------- */
+.kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: var(--muted);
+}
+.kicker--light { color: var(--on-ink-3); }
+
+.section-title {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(23px, 3.6vw, 30px);
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+.lede {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-3);
+  text-wrap: pretty;
+}
+.section { padding: var(--pad); }
+.section--paper { background: var(--paper); }
+.section--paper2 { background: var(--paper-2); }
+.section--ink { background: var(--ink); color: var(--on-ink); }
+
+.stack { display: flex; flex-direction: column; }
+.gap-8  { gap: 8px; }
+.gap-14 { gap: 14px; }
+.gap-22 { gap: 22px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 14px 22px;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background .25s ease, color .25s ease, border-color .25s ease, transform .2s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn--solid { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.btn--solid:hover { background: var(--green); border-color: var(--green); color: var(--paper); }
+.btn--ghost { background: transparent; color: var(--on-ink); border-color: #39393f; font-weight: 600; }
+.btn--ghost:hover { border-color: var(--paper); }
+
+/* ---------------------------------------------------------------
+   Masthead
+   --------------------------------------------------------------- */
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 18px;
+  flex-wrap: wrap;
+  padding: 10px var(--pad);
+  background: var(--ink);
+  color: var(--on-ink);
+  transition: padding .28s ease, box-shadow .28s ease;
+}
+.masthead.is-condensed { padding-block: 6px; box-shadow: 0 10px 28px rgba(22,22,27,.34); }
+.wordmark {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: .18em;
+}
+.masthead__nav { display: flex; align-items: center; gap: 0; flex: 1 1 auto; justify-content: flex-end; flex-wrap: wrap; }
+.masthead__nav a {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 11px 9px;
+  border-radius: 9px;
+  color: rgba(245,244,240,.86);
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: background .2s ease, color .2s ease;
+}
+.masthead__nav a:hover { background: #26262c; color: var(--on-ink); }
+
+/* ---------------------------------------------------------------
+   Hero
+   --------------------------------------------------------------- */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: clamp(24px, 4vw, 48px);
+  align-items: center;
+  padding: clamp(30px, 5vw, 52px) var(--pad) clamp(28px, 4.5vw, 46px);
+  background: var(--ink);
+  color: var(--on-ink);
+}
+@media (max-width: 860px) { .hero { grid-template-columns: minmax(0, 1fr); } }
+
+.badge-verified {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  background: var(--green);
+}
+.badge-verified span:first-child {
+  width: 7px; height: 7px; border-radius: var(--r-pill); background: var(--paper);
+}
+.badge-verified span:last-child {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+}
+
+.product { display: flex; align-items: center; gap: clamp(14px, 3vw, 24px); }
+.product__shot {
+  width: clamp(84px, 14vw, 132px);
+  height: clamp(84px, 14vw, 132px);
+  flex: none;
+  object-fit: contain;
+  border-radius: var(--r-md);
+  background: var(--paper);
+  padding: 6px;
+  transition: transform .5s cubic-bezier(.22,.61,.36,1), box-shadow .5s ease;
+}
+.product__shot:hover { transform: translateY(-5px) rotate(-2deg); box-shadow: 0 22px 44px rgba(0,0,0,.45); }
+.product__brand { font-size: 15px; color: rgba(245,244,240,.7); }
+.product__name {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(24px, 5vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -.025em;
+  text-wrap: pretty;
+}
+.hero__lede {
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.55;
+  color: var(--on-ink-2);
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+.hero__actions { display: flex; gap: 11px; flex-wrap: wrap; }
+
+.scorecard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px 26px;
+  border-radius: var(--r-lg);
+  background: var(--ink-2);
+  border: 1px solid var(--ink-line);
+}
+.scorecard__row { display: flex; align-items: flex-end; gap: 12px; }
+.scorecard__value {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(56px, 9vw, 76px);
+  line-height: .86;
+  letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums;
+}
+.scorecard__band { font-size: 15px; font-weight: 700; color: var(--green-soft); }
+.scale { display: flex; gap: 4px; }
+.scale span { flex: 1; height: 9px; border-radius: 3px; background: #39392f; }
+.scale span.is-on { background: var(--green); }
+.scorecard__note { font-size: 13px; line-height: 1.6; color: rgba(245,244,240,.72); text-wrap: pretty; }
+.meta { display: flex; flex-direction: column; gap: 8px; padding-top: 15px; border-top: 1px solid var(--ink-line); }
+.meta__row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.meta__k { font-size: 13px; color: rgba(245,244,240,.6); }
+.meta__v { font-size: 13px; font-weight: 600; text-align: right; }
+
+/* ---------------------------------------------------------------
+   Disposal
+   --------------------------------------------------------------- */
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.tabs { display: flex; gap: 9px; padding: 5px; border-radius: var(--r-pill); background: var(--paper-3); }
+.tabs button {
+  min-height: 46px;
+  padding: 12px 22px;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: #2b2b32;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+.tabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); font-weight: 700; }
+
+.parts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+.part {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--white);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.part:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(22,22,27,.10); }
+.part__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.part__tag {
+  width: 44px; height: 44px;
+  border-radius: 13px;
+  color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 12px; font-weight: 600;
+}
+.part__verdict {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+}
+.part__name { font-family: var(--display); font-weight: 700; font-size: 19px; }
+.part__action { font-size: 15px; line-height: 1.6; color: var(--text-2); text-wrap: pretty; }
+.part__reuse { display: flex; flex-direction: column; gap: 8px; margin-top: 3px; padding-top: 13px; border-top: 1px dashed var(--line); }
+.part__reuse .kicker { color: var(--green); font-size: 10px; letter-spacing: .13em; }
+.part__reuse li { display: flex; gap: 9px; align-items: flex-start; font-size: 13px; line-height: 1.6; color: #3d3d45; }
+.part__reuse ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.dot { flex: none; margin-top: 7px; width: 5px; height: 5px; border-radius: var(--r-pill); background: var(--green); }
+
+.tone-good .part__tag { background: var(--green); }
+.tone-good .part__verdict { background: var(--green-bg); color: var(--green); }
+.tone-good { border-color: var(--green-bd); }
+.tone-warn .part__tag { background: var(--amber); }
+.tone-warn .part__verdict { background: var(--amber-bg); color: var(--amber); }
+.tone-warn { border-color: var(--amber-bd); }
+.tone-bad .part__tag { background: var(--red); }
+.tone-bad .part__verdict { background: var(--red-bg); color: var(--red); }
+.tone-bad { border-color: var(--red-bd); }
+
+.note { font-size: 14px; line-height: 1.6; color: var(--muted); max-width: 76ch; text-wrap: pretty; }
+
+/* ---------------------------------------------------------------
+   Pillars
+   --------------------------------------------------------------- */
+.pillar {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--white);
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  transition: border-color .25s ease;
+}
+.pillar:hover { border-color: var(--ink); }
+.pillar[aria-expanded="true"] { border-color: var(--ink); }
+.pillar__head {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr) 96px 40px;
+  gap: 22px;
+  align-items: center;
+  padding: 20px 24px;
+}
+.pillar__human { font-family: var(--display); font-weight: 700; font-size: 17px; }
+.pillar__label { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--muted); }
+.pillar__bar { display: block; height: 12px; border-radius: 4px; background: var(--paper-2); overflow: hidden; }
+.pillar__bar i { display: block; height: 100%; }
+.pillar__plain { font-size: 14px; line-height: 1.5; color: var(--text-2); text-wrap: pretty; }
+.pillar__value { text-align: right; font-family: var(--display); font-weight: 700; font-size: 26px; }
+.pillar__chev { text-align: center; font-size: 17px; color: var(--muted); }
+.pillar__detail { display: flex; flex-direction: column; gap: 11px; padding: 4px 24px 22px 236px; }
+.pillar__detail li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 1.55; color: var(--text-2); text-wrap: pretty; }
+.pillar__detail ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 11px; }
+.pillar__detail .dot { margin-top: 7px; width: 7px; height: 7px; }
+[hidden] { display: none !important; }
+
+@media (max-width: 760px) {
+  .pillar__head { grid-template-columns: minmax(0, 1fr) 62px 28px; gap: 12px; padding: 18px; }
+  .pillar__head > :nth-child(2) { grid-column: 1 / -1; }
+  .pillar__value { font-size: 22px; }
+  .pillar__detail { padding: 0 18px 18px; }
+}
+
+/* ---------------------------------------------------------------
+   Gaps + provenance
+   --------------------------------------------------------------- */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 40px;
+}
+@media (max-width: 980px) { .split { grid-template-columns: minmax(0, 1fr); } }
+
+.gap-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 18px 20px;
+  border-left: 3px solid var(--red);
+  border-radius: 0 12px 12px 0;
+  background: var(--white);
+}
+.gap-card b { font-size: 15px; font-weight: 700; line-height: 1.4; }
+.gap-card p { font-size: 14px; line-height: 1.55; color: var(--text-2); text-wrap: pretty; }
+.gap-card em { font-style: normal; font-size: 13px; line-height: 1.5; color: var(--green); }
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px 26px;
+  border-radius: 18px;
+  background: var(--ink);
+  color: var(--on-ink);
+  align-self: start;
+}
+.panel p { font-size: 15px; line-height: 1.65; color: rgba(245,244,240,.86); text-wrap: pretty; }
+.panel .meta__k { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; }
+.panel .meta__v { font-weight: 400; }
+.panel button { min-height: 48px; border-radius: var(--r-sm); }
+
+/* ---------------------------------------------------------------
+   Footer
+   --------------------------------------------------------------- */
+.footer {
+  padding: 38px var(--pad);
+  background: var(--ink);
+  color: var(--on-ink-3);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 36px;
+  flex-wrap: wrap;
+}
+.footer__cols { display: flex; gap: 40px; flex-wrap: wrap; }
+.footer__col { display: flex; flex-direction: column; gap: 8px; }
+.footer__col span:first-child { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: rgba(245,244,240,.45); }
+.footer__col a { font-size: 13px; color: inherit; min-height: var(--tap); display: flex; align-items: center; }
+.footer__col a:hover { color: var(--on-ink); }
+.legal {
+  padding: 16px var(--pad) 26px;
+  background: var(--ink);
+  color: rgba(245,244,240,.5);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------
+   Reveal on scroll
+   --------------------------------------------------------------- */
+[data-reveal] { opacity: 0; transform: translateY(22px); }
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  * { animation: none !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="masthead" id="masthead">
+  <span class="wordmark">BTRMRK</span>
+  <nav class="masthead__nav" aria-label="Primary">
+    <a href="#disposal">What to do with it</a>
+    <a href="#pillars">How it scored</a>
+    <a href="#method">How it was checked</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============================= HERO ============================= -->
+  <section class="hero">
+    <div class="stack gap-22">
+      <span class="badge-verified"><span></span><span>INDEPENDENTLY VERIFIED</span></span>
+
+      <div class="product">
+        <img class="product__shot"
+             src="assets/product/candy-pop-shower-gel.webp"
+             alt="Candy Pop Honey Citrus Shower Gel bottle, 350 mL"
+             width="132" height="132">
+        <div class="stack gap-8">
+          <span class="product__brand">Candy Pop Personal Care · Hong Kong</span>
+          <h1 class="product__name">Candy Pop Honey Citrus Shower Gel 350 mL</h1>
+        </div>
+      </div>
+
+      <p class="hero__lede">Fifty checks on how this shower gel was made, who made it, how it reached you and what happens to the bottle. Every answer had to be evidenced, and the evidence was read by someone who does not work for the brand.</p>
+
+      <div class="hero__actions">
+        <button type="button" class="btn btn--solid" data-jump="#disposal">What do I do with it?</button>
+        <a class="btn btn--ghost" href="#method">How was this checked?</a>
+      </div>
+    </div>
+
+    <aside class="scorecard" aria-label="Overall rating">
+      <div class="scorecard__row">
+        <span class="scorecard__value" id="score">3.5</span>
+        <span class="stack" style="gap:4px;padding-bottom:9px">
+          <span class="kicker kicker--light">OUT OF 5</span>
+          <span class="scorecard__band" id="band">Advancing</span>
+        </span>
+      </div>
+      <div class="scale" id="scale" role="img" aria-label="3.5 out of 5"></div>
+      <p class="scorecard__note">Held back mainly by the sleeve label, which cannot be recycled with the bottle. The manufacturing and labour evidence is among the strongest we see.</p>
+      <div class="meta">
+        <div class="meta__row"><span class="meta__k">Certified</span><span class="meta__v">5 September 2026</span></div>
+        <div class="meta__row"><span class="meta__k">Valid to</span><span class="meta__v">August 2027</span></div>
+        <div class="meta__row"><span class="meta__k">Sold in</span><span class="meta__v">Hong Kong, Australia</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- =========================== DISPOSAL =========================== -->
+  <section class="section section--paper" id="disposal">
+    <div class="stack gap-22">
+      <div class="section-head" data-reveal>
+        <div class="stack gap-8" style="max-width:60ch">
+          <span class="kicker">WHAT TO DO WITH IT</span>
+          <h2 class="section-title">Where did you buy it?</h2>
+          <p class="lede">The right answer depends on what your city actually collects, not on what the plastic could be recycled into in theory.</p>
+        </div>
+        <div class="tabs" id="markets" role="group" aria-label="Country of purchase"></div>
+      </div>
+
+      <div class="parts" id="parts"></div>
+      <p class="note" id="disposal-note"></p>
+      <p class="note" data-reveal>Reuse beats recycling, so where a part has a genuine second use it is listed on its card. Most parts do not have one, and BTRMRK would rather leave the space empty than invent a suggestion.</p>
+    </div>
+  </section>
+
+  <!-- ============================ PILLARS =========================== -->
+  <section class="section section--paper2" id="pillars">
+    <div class="stack" style="gap:24px">
+      <div class="stack gap-8" style="max-width:62ch" data-reveal>
+        <span class="kicker">HOW IT SCORED</span>
+        <h2 class="section-title">Five things, checked separately</h2>
+        <p class="lede">Ten questions each, fifty in total. A product can be made well and still travel badly, so the pillars are never averaged into a single claim without showing the parts.</p>
+      </div>
+      <div class="stack" style="gap:11px" id="pillars-list"></div>
+    </div>
+  </section>
+
+  <!-- ====================== GAPS + PROVENANCE ======================= -->
+  <section class="section section--paper split" id="method">
+    <div class="stack gap-14">
+      <span class="kicker">WHERE IT FALLS SHORT</span>
+      <h2 class="section-title">Published, not polished</h2>
+      <p class="lede" style="max-width:52ch">A rating that only showed strengths would not be worth reading. These are the criteria this product did not meet, and what the manufacturer has said they will do.</p>
+      <div class="stack" style="gap:11px;padding-top:6px" id="gaps"></div>
+    </div>
+
+    <aside class="panel" data-reveal>
+      <span class="kicker kicker--light">WHO CHECKED THIS</span>
+      <p>Answers came from the manufacturer in Hong Kong and its Australian distributor, then were reviewed criterion by criterion by an independent BTRMRK assessor who saw the underlying certificates, audits and invoices. Claims without acceptable evidence scored lower whatever the answer given. If the evidence behind this rating expires, the rating is republished or withdrawn — it is never left standing as current.</p>
+      <div class="meta">
+        <div class="meta__row"><span class="meta__k">CRITERIA</span><span class="meta__v">48 assessed · 2 not applicable</span></div>
+        <div class="meta__row"><span class="meta__k">REVIEWED BY</span><span class="meta__v">Independent assessor</span></div>
+        <div class="meta__row"><span class="meta__k">MADE IN</span><span class="meta__v">Kwai Chung, Hong Kong</span></div>
+        <div class="meta__row"><span class="meta__k">LAST CHANGE</span><span class="meta__v">None since certification</span></div>
+      </div>
+      <button type="button" class="btn btn--ghost">Read the full method</button>
+    </aside>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="stack" style="gap:9px;max-width:44ch">
+    <span class="wordmark" style="font-size:15px;color:var(--on-ink)">BTRMRK</span>
+    <span style="font-size:13px;line-height:1.6;text-wrap:pretty">A product rating built from evidence, not claims. Ratings are republished when the evidence behind them expires, and corrections are shown on the record rather than made quietly.</span>
+  </div>
+  <div class="footer__cols">
+    <div class="footer__col">
+      <span>RATINGS</span>
+      <a href="#pillars">How ratings work</a>
+      <a href="#pillars">The five pillars</a>
+      <a href="#method">What evidence counts</a>
+    </div>
+    <div class="footer__col">
+      <span>BTRMRK</span>
+      <a href="#">About</a>
+      <a href="#">For manufacturers</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<div class="legal">2026 | Shrunk Innovation Group Pty Ltd | All Rights Reserved</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* -------------------------------------------------------------
+     Data
+     ------------------------------------------------------------- */
+  var PILLARS = [
+    { key: 'materials', label: 'MATERIALS', human: "What it's made from", value: 3.5,
+      plain: 'The bottle contains 30% recycled plastic, checked by an outside certifier rather than claimed by the supplier.',
+      detail: [
+        ['Recycled content independently verified at 30% of the bottle body.', 'good'],
+        ["Two ingredient origins rest on the supplier's own statement rather than an audit.", 'warn'],
+        ['No restricted substances found in the specification.', 'good']
+      ] },
+    { key: 'method', label: 'METHOD', human: "How it's made", value: 4.0,
+      plain: 'Made on renewable electricity at a Hong Kong site that measures its water and waste every month.',
+      detail: [
+        ['Renewable electricity evidenced by supply contract and certificate registry.', 'good'],
+        ['Water and waste metered for the full year, with a documented reduction.', 'good'],
+        ['Energy efficiency improvements described but not yet evidenced with results.', 'warn']
+      ] },
+    { key: 'makers', label: 'MAKERS', human: 'Who makes it', value: 4.5,
+      plain: 'Wages, hours and safety were checked at the factory by an independent auditor in the last twelve months.',
+      detail: [
+        ['Current four-pillar social audit with no critical findings.', 'good'],
+        ['Wages verified against a payroll sample, not just a policy.', 'good'],
+        ['A working grievance channel that workers can use anonymously.', 'good']
+      ] },
+    { key: 'journey', label: 'JOURNEY', human: 'How it got here', value: 3.0,
+      plain: 'Shipped by sea between Hong Kong and Australia, though the emissions are estimated rather than reported per shipment.',
+      detail: [
+        ['Sea freight only — no routine air freight on this route.', 'good'],
+        ['Carrier emissions estimated from industry averages, not measured.', 'warn'],
+        ['Container utilisation around 70%, with room to consolidate.', 'warn']
+      ] },
+    { key: 'fate', label: 'FATE', human: 'What happens next', value: 2.0,
+      plain: 'The bottle is recyclable where you are, but the sleeve label is not — and that is the biggest thing holding this product back.',
+      detail: [
+        ['The bottle is accepted by collection in both launch markets.', 'good'],
+        ['The PVC sleeve label contaminates the stream if it is left on.', 'bad'],
+        ['No design-for-recycling assessment on file for the current pack.', 'bad']
+      ] }
+  ];
+
+  /* Second-life hints only where they genuinely beat recycling. */
+  var REUSE = {
+    Bottle: [
+      'Refill it from the Candy Pop 1 L refill pouch instead of buying another bottle. The pouch carries about 80% less plastic per wash.',
+      'Rinsed out, it seals well enough to decant into for the gym or a weekend away.'
+    ],
+    Carton: [
+      'Flat uncoated board protects well in the post. Worth flattening and keeping if you post things, rather than sending it straight to paper collection.'
+    ]
+  };
+
+  var DISPOSAL = {
+    'Hong Kong': {
+      note: 'Guidance for Hong Kong. There is no deposit refund here, so the bottle goes to a plastics collection point rather than a return machine. Kerbside collection does not accept it in every district.',
+      parts: [
+        { part: 'Bottle', tag: 'PET', verdict: 'RECYCLE', tone: 'warn',
+          action: 'Rinse it, take the sleeve off, and put it in a plastics collection point — most housing estates and MTR stations have one.' },
+        { part: 'Sleeve label', tag: 'PVC', verdict: 'GENERAL WASTE', tone: 'bad',
+          action: 'Peel it off before you recycle the bottle. It cannot be recycled here and it spoils the bottle if left on.' },
+        { part: 'Carton', tag: 'PAP', verdict: 'RECYCLE', tone: 'good',
+          action: 'Flatten it and put it in paper recycling. Accepted everywhere in Hong Kong.' }
+      ]
+    },
+    Australia: {
+      note: 'Guidance for Australia. Most states run a container deposit scheme, so the bottle is worth 10 cents back — but only if it goes to a return point rather than the yellow bin.',
+      parts: [
+        { part: 'Bottle', tag: 'PET', verdict: '10c REFUND', tone: 'good',
+          action: 'Take the sleeve off, then return it to a container deposit point for the refund. It is also accepted in the yellow bin without the refund.' },
+        { part: 'Sleeve label', tag: 'PVC', verdict: 'RED BIN', tone: 'bad',
+          action: 'Peel it off and put it in general waste. PVC is not collected in any Australian kerbside stream.' },
+        { part: 'Carton', tag: 'PAP', verdict: 'YELLOW BIN', tone: 'good',
+          action: 'Flatten it and put it in the yellow recycling bin.' }
+      ]
+    }
+  };
+
+  var GAPS = [
+    ['The sleeve label cannot be recycled',
+     'It is PVC, which contaminates the stream the bottle is collected into if it is not removed first.',
+     'Candy Pop has committed to a PVC-free sleeve within two quarters.'],
+    ['Freight emissions are estimated, not measured',
+     "The Hong Kong to Australia route is reported using industry averages rather than the carrier's own figures.",
+     'Per-shipment carrier reporting requested for the next contract year.'],
+    ['Some ingredient origins are self-declared',
+     "Two inputs rest on the supplier's own statement rather than an independent check.",
+     'Independent verification in progress.']
+  ];
+
+  var DOT = { good: '#2e6b46', warn: '#8a6a12', bad: '#9a3535' };
+
+  function band(v) {
+    return v >= 5 ? 'Defining' : v >= 4 ? 'Leading' : v >= 3 ? 'Advancing' : v >= 2 ? 'Building' : 'Starting';
+  }
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  /* -------------------------------------------------------------
+     Overall score
+     ------------------------------------------------------------- */
+  var overall = PILLARS.reduce(function (a, p) { return a + p.value; }, 0) / PILLARS.length;
+  var rounded = Math.round(overall * 2) / 2;
+
+  document.getElementById('band').textContent = band(rounded);
+
+  var scale = document.getElementById('scale');
+  scale.setAttribute('aria-label', rounded.toFixed(1) + ' out of 5');
+  for (var i = 0; i < 10; i++) {
+    var seg = el('span');
+    if (i < Math.round(rounded * 2)) seg.className = 'is-on';
+    scale.appendChild(seg);
+  }
+
+  /* -------------------------------------------------------------
+     Disposal, by market
+     ------------------------------------------------------------- */
+  var market = 'Hong Kong';
+  var tabsEl = document.getElementById('markets');
+  var partsEl = document.getElementById('parts');
+  var noteEl = document.getElementById('disposal-note');
+
+  function renderTabs() {
+    tabsEl.innerHTML = '';
+    Object.keys(DISPOSAL).forEach(function (name) {
+      var b = el('button', null, name);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(name === market));
+      b.addEventListener('click', function () { market = name; renderTabs(); renderParts(); });
+      tabsEl.appendChild(b);
+    });
+  }
+
+  function renderParts() {
+    var d = DISPOSAL[market];
+    partsEl.innerHTML = '';
+    noteEl.textContent = d.note;
+
+    d.parts.forEach(function (p, idx) {
+      var card = el('article', 'part tone-' + p.tone);
+      card.setAttribute('data-reveal', '');
+      card.style.transitionDelay = (idx * 70) + 'ms';
+
+      var top = el('div', 'part__top');
+      top.appendChild(el('span', 'part__tag', p.tag));
+      top.appendChild(el('span', 'part__verdict', p.verdict));
+      card.appendChild(top);
+
+      card.appendChild(el('h3', 'part__name', p.part));
+      card.appendChild(el('p', 'part__action', p.action));
+
+      var hints = REUSE[p.part];
+      if (hints && hints.length) {
+        var box = el('div', 'part__reuse');
+        box.appendChild(el('span', 'kicker', 'BEFORE YOU RECYCLE IT'));
+        var ul = el('ul');
+        hints.forEach(function (h) {
+          var li = el('li');
+          li.appendChild(el('span', 'dot'));
+          li.appendChild(el('span', null, h));
+          ul.appendChild(li);
+        });
+        box.appendChild(ul);
+        card.appendChild(box);
+      }
+
+      partsEl.appendChild(card);
+      watch(card);
+    });
+  }
+
+  /* -------------------------------------------------------------
+     Pillars
+     ------------------------------------------------------------- */
+  var listEl = document.getElementById('pillars-list');
+
+  PILLARS.forEach(function (p, idx) {
+    var open = p.key === 'fate';
+    var fg = p.value >= 4 ? '#2e6b46' : p.value >= 3 ? '#8a6a12' : '#9a3535';
+    var barBg = p.value >= 4 ? '#2e6b46' : p.value >= 3 ? '#8fae9b' : '#d9c48a';
+
+    var btn = el('button', 'pillar');
+    btn.type = 'button';
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('data-reveal', '');
+    btn.style.transitionDelay = (idx * 70) + 'ms';
+
+    var head = el('span', 'pillar__head');
+
+    var who = el('span', 'stack');
+    who.style.gap = '3px';
+    who.appendChild(el('span', 'pillar__human', p.human));
+    who.appendChild(el('span', 'pillar__label', p.label));
+    head.appendChild(who);
+
+    var mid = el('span', 'stack');
+    mid.style.gap = '8px';
+    mid.style.minWidth = '0';
+    var bar = el('span', 'pillar__bar');
+    var fill = el('i');
+    fill.style.width = Math.round((p.value / 5) * 100) + '%';
+    fill.style.background = barBg;
+    bar.appendChild(fill);
+    mid.appendChild(bar);
+    mid.appendChild(el('span', 'pillar__plain', p.plain));
+    head.appendChild(mid);
+
+    var val = el('span', 'pillar__value', p.value.toFixed(1));
+    val.style.color = fg;
+    head.appendChild(val);
+
+    var chev = el('span', 'pillar__chev', open ? '\u2212' : '+');
+    head.appendChild(chev);
+    btn.appendChild(head);
+
+    var detail = el('span', 'pillar__detail');
+    if (!open) detail.hidden = true;
+    var ul = el('ul');
+    p.detail.forEach(function (row) {
+      var li = el('li');
+      var dot = el('span', 'dot');
+      dot.style.background = DOT[row[1]];
+      li.appendChild(dot);
+      li.appendChild(el('span', null, row[0]));
+      ul.appendChild(li);
+    });
+    detail.appendChild(ul);
+    btn.appendChild(detail);
+
+    btn.addEventListener('click', function () {
+      var isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      detail.hidden = isOpen;
+      chev.textContent = isOpen ? '+' : '\u2212';
+    });
+
+    listEl.appendChild(btn);
+    watch(btn);
+  });
+
+  /* -------------------------------------------------------------
+     Gaps
+     ------------------------------------------------------------- */
+  var gapsEl = document.getElementById('gaps');
+  GAPS.forEach(function (g, idx) {
+    var card = el('div', 'gap-card');
+    card.setAttribute('data-reveal', '');
+    card.style.transitionDelay = (idx * 70) + 'ms';
+    var inner = el('span', 'stack');
+    inner.style.gap = '5px';
+    inner.appendChild(el('b', null, g[0]));
+    inner.appendChild(el('p', null, g[1]));
+    inner.appendChild(el('em', null, g[2]));
+    card.appendChild(inner);
+    gapsEl.appendChild(card);
+    watch(card);
+  });
+
+  /* -------------------------------------------------------------
+     Reveal on scroll — observer, with a failsafe so content can
+     never be stranded invisible if the page never scrolls.
+     ------------------------------------------------------------- */
+  var io = null;
+  if ('IntersectionObserver' in window) {
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+  }
+  function watch(node) {
+    if (io) io.observe(node); else node.classList.add('is-in');
+  }
+  setTimeout(function () {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-reveal]'), function (n) {
+      n.classList.add('is-in');
+    });
+  }, 2200);
+
+  /* -------------------------------------------------------------
+     Condense the masthead once past the hero
+     ------------------------------------------------------------- */
+  var masthead = document.getElementById('masthead');
+  var condensed = null;
+  function onScroll() {
+    var next = (window.scrollY || document.documentElement.scrollTop || 0) > 40;
+    if (next === condensed) return;
+    condensed = next;
+    masthead.classList.toggle('is-condensed', next);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* -------------------------------------------------------------
+     Count the score up on first paint
+     ------------------------------------------------------------- */
+  var scoreEl = document.getElementById('score');
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (calm) {
+    scoreEl.textContent = rounded.toFixed(1);
+  } else {
+    var t0 = performance.now(), dur = 1100;
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / dur);
+      scoreEl.textContent = ((1 - Math.pow(1 - k, 3)) * rounded).toFixed(1);
+      if (k < 1) requestAnimationFrame(step);       // stops as soon as it settles
+    })(t0);
+  }
+
+  /* -------------------------------------------------------------
+     Hero jump
+     ------------------------------------------------------------- */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-jump]'), function (b) {
+    b.addEventListener('click', function () {
+      var target = document.querySelector(b.getAttribute('data-jump'));
+      if (!target) return;
+      var top = target.getBoundingClientRect().top + window.scrollY - masthead.offsetHeight - 8;
+      window.scrollTo({ top: top, behavior: calm ? 'auto' : 'smooth' });
+    });
+  });
+
+  renderTabs();
+  renderParts();
+})();
+</script>
+
+</body>
+</html>
