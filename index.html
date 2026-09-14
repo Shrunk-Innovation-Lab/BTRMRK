@@ -9,9 +9,8 @@
 
 <!-- ============================================================
      EDIT THESE AND YOU'RE DONE:
-       1. the email address in the mailto: link near the bottom
-       2. the accent colour --mark, if BTRMRK's brand colour differs
-       3. SPEED / EYE at the top of the script, to retune the terrain
+       1. the accent colour --mark, if BTRMRK's brand colour differs
+       2. SPEED / EYE at the top of the script, to retune the terrain
      ============================================================ -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,16 +49,27 @@
   }
 
   /* ---------- 3d terrain layers ---------- */
+  /* A canvas is a replaced element: inset:0 alone leaves it at its intrinsic
+     300x150, so the size has to be stated. Layout size lives here in CSS only —
+     the script sets the backing store, never the style. */
   #bg{
     position:fixed;
-    inset:0;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    height:100lvh;
     z-index:0;
     display:block;
     pointer-events:none;
   }
   .veil{
     position:fixed;
-    inset:0;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    height:100lvh;
     z-index:1;
     pointer-events:none;
     background:radial-gradient(
@@ -153,24 +163,6 @@
     text-wrap:balance;
   }
 
-  .contact{
-    display:inline-block;
-    margin-top:clamp(14px, 2.2vh, 30px);
-    color:var(--ink);
-    font-variation-settings:"wdth" 100,"wght" 600;
-    font-size:1.02rem;
-    text-decoration:none;
-    border-bottom:2px solid var(--mark);
-    padding:11px 2px 8px;
-    -webkit-tap-highlight-color:rgba(224,0,107,.14);
-  }
-  .contact:hover{ color:var(--mark); }
-  .contact:focus-visible{
-    outline:2px solid var(--mark);
-    outline-offset:6px;
-    border-radius:2px;
-  }
-
   /* ---------- footer ---------- */
   .foot{
     font-size:.78rem;
@@ -204,7 +196,6 @@
     .headline{ font-size:clamp(1.7rem, 5.4vw, 3rem); max-width:22ch; }
     .datum{ margin:12px 0; height:12px; }
     .note{ margin-top:8px; }
-    .contact{ margin-top:10px; }
   }
 
   /* ---------- one load sequence ---------- */
@@ -212,13 +203,12 @@
   .datum{ transform:scaleX(0); transform-origin:left; animation:sweep .72s cubic-bezier(.2,.7,.3,1) .4s forwards; }
   .lede{ opacity:0; animation:rise .5s ease-out .62s forwards; }
   .note{ opacity:0; animation:rise .5s ease-out .76s forwards; }
-  .contact{ opacity:0; animation:rise .5s ease-out .9s forwards; }
 
   @keyframes rise{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
   @keyframes sweep{ to{ transform:scaleX(1); } }
 
   @media (prefers-reduced-motion: reduce){
-    .headline,.datum,.lede,.note,.contact{
+    .headline,.datum,.lede,.note{
       animation:none;
       opacity:1;
       transform:none;
@@ -247,8 +237,6 @@
     <p class="lede">We’re building a simpler way to understand the impact behind the products you buy.</p>
 
     <p class="note">BTRMRK is currently under construction. Check back soon.</p>
-
-    <a class="contact" href="mailto:hello@btrmrk.com">hello@btrmrk.com</a>
 
   </main>
 
@@ -286,22 +274,29 @@
     w = nw;
     h = nh;
 
-    // Fewer lines and a lower pixel ratio on phones: same picture, far less work.
+    // Fewer rows and a lower pixel ratio on phones: same picture, far less work.
     var narrow = w < 700;
-    COLS = narrow ? 20 : 30;
     ROWS = narrow ? 26 : 34;
     XS   = narrow ? 1.5 : 1.15;
-
-    var dpr = Math.min(window.devicePixelRatio || 1, narrow ? 1.75 : 2);
-    canvas.width  = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    canvas.style.width  = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     cx = w / 2;
     cy = h * 0.44;                     // horizon
     f  = Math.max(h, w * 0.62) * 1.15; // focal length
+
+    // Widen the plane until it runs past both screen edges at the depth where
+    // the lines are still visible — otherwise a wide monitor sees the plane end.
+    var zDeep  = NEAR + ROWS * ZS * 0.62;
+    var reach  = (w / 2) * zDeep / f;   // world half-width needed at that depth
+    COLS = Math.ceil((reach * 3.0) / XS);
+    COLS = Math.max(narrow ? 20 : 28, Math.min(COLS, 90));
+
+    var dpr = Math.min(window.devicePixelRatio || 1, narrow ? 1.75 : 2);
+    // Only the backing store is set here. Touching canvas.style.width would
+    // pin the box to a fixed pixel size and the next measurement would be stale.
+    canvas.width  = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
     return true;
   }
 
