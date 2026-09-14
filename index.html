@@ -257,7 +257,7 @@
   var COLS = 30,     // columns across
       ROWS = 34,     // rows into the distance
       XS   = 1.15,   // column spacing (world units)
-      ZS   = 1.0,    // row spacing
+      ZS   = 1.0,    // row spacing (recomputed per viewport)
       NEAR = 1.4,    // nearest row
       EYE  = 1.55,   // camera height above the plane (recomputed per viewport)
       SPEED = 0.55;  // world units per second, toward the viewer
@@ -276,10 +276,14 @@
     w = nw;
     h = nh;
 
-    // Fewer rows and a lower pixel ratio on phones: same picture, far less work.
+    // Phones need a FINER mesh, not a coarser one. A narrow viewport with a wide
+    // lens puts mid-screen at only z~3, where column spacing is f*XS/z — at
+    // XS 1.5 that is 150px apart, i.e. three lines on the whole screen. Tighter
+    // spacing and a nearer horizon give the same line count a real mesh.
     var narrow = w < 700;
-    ROWS = narrow ? 26 : 34;
-    XS   = narrow ? 1.5 : 1.15;
+    ROWS = narrow ? 15   : 34;
+    ZS   = narrow ? 0.8  : 1.0;
+    XS   = narrow ? 0.55 : 1.15;
 
     cx = w / 2;
 
