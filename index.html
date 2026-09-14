@@ -216,6 +216,8 @@
       transform:none;
     }
   }
+
+
 </style>
 </head>
 <body>
@@ -247,27 +249,48 @@
 </div>
 
 <script>
-/* Wireframe survey mesh: a ground plane in real perspective, drifting toward
-   the viewer. No libraries — the projection is eight lines of maths. */
+/* Interactive wireframe survey mesh.
+   Foreground content/layout is untouched.
+   Interaction lives entirely in the background canvas:
+   - desktop: a subtle lens follows the mouse and reveals a darker,
+     slightly lifted patch of terrain
+   - click/tap: three contour rings expand from the exact interaction point
+   - mobile: drag the lens with your finger; release to let it fade away
+*/
 (function () {
   var canvas = document.getElementById('bg');
   if (!canvas || !canvas.getContext) return;
   var ctx = canvas.getContext('2d');
 
-  var COLS = 30,     // columns across
-      ROWS = 34,     // rows into the distance
-      XS   = 1.15,   // column spacing (world units)
-      ZS   = 1.0,    // row spacing (recomputed per viewport)
-      NEAR = 1.4,    // nearest row
-      EYE  = 1.55,   // camera height above the plane (recomputed per viewport)
-      SPEED = 0.55;  // world units per second, toward the viewer
+  var COLS = 30,
+      ROWS = 34,
+      XS   = 1.15,
+      ZS   = 1.0,
+      NEAR = 1.4,
+      EYE  = 1.55,
+      SPEED = 0.55;
 
   var w = 0, h = 0, cx = 0, cy = 0, f = 0, raf = 0;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var finePointer = window.matchMedia('(pointer:fine)');
+
+  /* Pointer is stored in CSS-pixel coordinates because the canvas context is
+     scaled to CSS pixels after resize(). */
+  var pointer = {
+    x: 0,
+    y: 0,
+    tx: 0,
+    ty: 0,
+    active: 0,
+    target: 0,
+    visible: false
+  };
+
+  var pulses = [];
+  var MAX_PULSES = 4;
+  var LENS_RADIUS = 118;
 
   function resize() {
-    // Measure the canvas box itself, not window.innerHeight — on mobile the
-    // two disagree while the address bar slides in and out.
     var box = canvas.getBoundingClientRect();
     var nw = Math.round(box.width)  || window.innerWidth;
     var nh = Math.round(box.height) || window.innerHeight;
@@ -276,87 +299,114 @@
     w = nw;
     h = nh;
 
-    // Phones need a FINER mesh, not a coarser one. A narrow viewport with a wide
-    // lens puts mid-screen at only z~3, where column spacing is f*XS/z — at
-    // XS 1.5 that is 150px apart, i.e. three lines on the whole screen. Tighter
-    // spacing and a nearer horizon give the same line count a real mesh.
+    /* Preserve the user's existing mobile mesh settings. */
     var narrow = w < 700;
     ROWS = narrow ? 15   : 34;
     ZS   = narrow ? 0.8  : 1.0;
     XS   = narrow ? 0.55 : 1.15;
+    LENS_RADIUS = narrow ? 92 : 118;
 
     cx = w / 2;
-
-    // Focal length from a fixed ~70 degree horizontal field of view. Deriving it
-    // from height instead turns a tall phone into a telephoto lens: four giant
-    // lines across the screen rather than a mesh.
     f = w * 0.714;
 
-    // Tall screens get a higher horizon so the ground claims more of the frame.
     var ratio = h / w;
     var horizon = Math.min(0.44, Math.max(0.34, 0.44 - (ratio - 0.6) * 0.07));
     cy = h * horizon;
 
-    // Then lift the camera until the nearest row falls past the bottom edge.
-    // Without this the plane stops short and leaves blank paper beneath it.
     EYE = Math.max(1.55, NEAR * (h - cy) / f * 1.04);
 
-    // Widen the plane until it runs past both screen edges at the depth where
-    // the lines are still visible — otherwise a wide monitor sees the plane end.
-    var zDeep  = NEAR + ROWS * ZS * 0.85;
-    var reach  = (w / 2) * zDeep / f;   // world half-width needed at that depth
+    var zDeep = NEAR + ROWS * ZS * 0.85;
+    var reach = (w / 2) * zDeep / f;
     COLS = Math.ceil((reach * 3.0) / XS);
     COLS = Math.max(narrow ? 20 : 28, Math.min(COLS, 90));
 
     var dpr = Math.min(window.devicePixelRatio || 1, narrow ? 1.75 : 2);
-    // Only the backing store is set here. Touching canvas.style.width would
-    // pin the box to a fixed pixel size and the next measurement would be stale.
     canvas.width  = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+    if (!pointer.x && !pointer.y) {
+      pointer.x = pointer.tx = w / 2;
+      pointer.y = pointer.ty = h / 2;
+    }
+
     return true;
   }
 
-  // Height field — three slow waves, no two in step.
   function elevation(x, z, t) {
     return Math.sin(x * 0.42 + z * 0.18 + t * 0.33) * 0.30
          + Math.sin(z * 0.31 - t * 0.21)            * 0.22
          + Math.sin(x * 0.19 - z * 0.26 + t * 0.14) * 0.16;
   }
 
-  function draw(t) {
-    ctx.clearRect(0, 0, w, h);
+  function lensLift(sx, sy) {
+    if (pointer.active < 0.001) return 0;
 
+    var dx = sx - pointer.x;
+    var dy = sy - pointer.y;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist >= LENS_RADIUS) return 0;
+
+    var n = 1 - dist / LENS_RADIUS;
+    /* Smooth, shallow lift. The terrain moves, but never enough to look rubbery. */
+    return n * n * 0.58 * pointer.active;
+  }
+
+  function projectPoint(x, z, t, scroll) {
+    var y0 = elevation(x, z + scroll, t);
+    var sx0 = cx + f * x / z;
+    var sy0 = cy + f * (EYE - y0) / z;
+    var y = y0 + lensLift(sx0, sy0);
+
+    return {
+      x: cx + f * x / z,
+      y: cy + f * (EYE - y) / z
+    };
+  }
+
+  function drawMesh(t, highlighted) {
     var scroll = t * SPEED;
-    var shift  = scroll % ZS;
+    var shift = scroll % ZS;
 
-    // Depth fade for free: lines are faint at the horizon, firm underfoot.
-    var fade = ctx.createLinearGradient(0, cy, 0, h);
-    fade.addColorStop(0,    'rgba(22,41,44,0)');
-    fade.addColorStop(0.28, 'rgba(22,41,44,0.07)');
-    fade.addColorStop(1,    'rgba(22,41,44,0.26)');
-    ctx.strokeStyle = fade;
-    ctx.lineWidth = 1;
+    if (highlighted) {
+      /* Restrict this second pass to the circular survey lens. */
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(pointer.x, pointer.y, LENS_RADIUS, 0, Math.PI * 2);
+      ctx.clip();
 
-    var i, j, x, z, y, sx, sy, open;
+      var lensFade = ctx.createRadialGradient(
+        pointer.x, pointer.y, 12,
+        pointer.x, pointer.y, LENS_RADIUS
+      );
+      lensFade.addColorStop(0,    'rgba(77,98,101,' + (0.48 * pointer.active) + ')');
+      lensFade.addColorStop(0.55, 'rgba(77,98,101,' + (0.28 * pointer.active) + ')');
+      lensFade.addColorStop(1,    'rgba(77,98,101,0)');
+      ctx.strokeStyle = lensFade;
+      ctx.lineWidth = 1.15;
+    } else {
+      var fade = ctx.createLinearGradient(0, cy, 0, h);
+      fade.addColorStop(0,    'rgba(22,41,44,0)');
+      fade.addColorStop(0.28, 'rgba(22,41,44,0.07)');
+      fade.addColorStop(1,    'rgba(22,41,44,0.26)');
+      ctx.strokeStyle = fade;
+      ctx.lineWidth = 1;
+    }
 
-    // Rows running across
+    var i, j, x, z, p, open;
+
     for (j = 0; j < ROWS; j++) {
       z = NEAR + j * ZS - shift;
       if (z < 0.4) continue;
       ctx.beginPath();
       for (i = 0; i <= COLS; i++) {
-        x  = (i - COLS / 2) * XS;
-        y  = elevation(x, z + scroll, t);
-        sx = cx + f * x / z;
-        sy = cy + f * (EYE - y) / z;
-        if (i) ctx.lineTo(sx, sy); else ctx.moveTo(sx, sy);
+        x = (i - COLS / 2) * XS;
+        p = projectPoint(x, z, t, scroll);
+        if (i) ctx.lineTo(p.x, p.y); else ctx.moveTo(p.x, p.y);
       }
       ctx.stroke();
     }
 
-    // Columns running away
     for (i = 0; i <= COLS; i++) {
       x = (i - COLS / 2) * XS;
       ctx.beginPath();
@@ -364,20 +414,89 @@
       for (j = 0; j < ROWS; j++) {
         z = NEAR + j * ZS - shift;
         if (z < 0.4) { open = false; continue; }
-        y  = elevation(x, z + scroll, t);
-        sx = cx + f * x / z;
-        sy = cy + f * (EYE - y) / z;
-        if (open) ctx.lineTo(sx, sy); else { ctx.moveTo(sx, sy); open = true; }
+        p = projectPoint(x, z, t, scroll);
+        if (open) ctx.lineTo(p.x, p.y);
+        else { ctx.moveTo(p.x, p.y); open = true; }
       }
       ctx.stroke();
     }
+
+    if (highlighted) ctx.restore();
+  }
+
+  function drawLens() {
+    if (pointer.active < 0.01) return;
+
+    ctx.save();
+
+    /* Soft inspection wash: it sharpens the lens without looking like a spotlight. */
+    var wash = ctx.createRadialGradient(
+      pointer.x, pointer.y, 0,
+      pointer.x, pointer.y, LENS_RADIUS
+    );
+    wash.addColorStop(0,    'rgba(77,98,101,' + (0.055 * pointer.active) + ')');
+    wash.addColorStop(0.62, 'rgba(77,98,101,' + (0.025 * pointer.active) + ')');
+    wash.addColorStop(1,    'rgba(77,98,101,0)');
+    ctx.fillStyle = wash;
+    ctx.beginPath();
+    ctx.arc(pointer.x, pointer.y, LENS_RADIUS, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawPulses(t) {
+    if (!pulses.length) return;
+
+    ctx.save();
+    ctx.strokeStyle = '#4d6265';
+    ctx.lineWidth = 1;
+
+    for (var i = pulses.length - 1; i >= 0; i--) {
+      var pulse = pulses[i];
+      var age = t - pulse.start;
+      if (age > pulse.life) {
+        pulses.splice(i, 1);
+        continue;
+      }
+
+      var progress = age / pulse.life;
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var fade = Math.pow(1 - progress, 1.7);
+
+      for (var ring = 0; ring < 3; ring++) {
+        var ringDelay = ring * 0.095;
+        var local = Math.max(0, Math.min(1, (progress - ringDelay) / (1 - ringDelay)));
+        if (local <= 0) continue;
+
+        var radius = 18 + (LENS_RADIUS * 1.42) * (1 - Math.pow(1 - local, 3));
+        ctx.globalAlpha = fade * (0.34 - ring * 0.065);
+        ctx.beginPath();
+        ctx.arc(pulse.x, pulse.y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    ctx.restore();
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, w, h);
+
+    pointer.x += (pointer.tx - pointer.x) * 0.22;
+    pointer.y += (pointer.ty - pointer.y) * 0.22;
+    pointer.active += (pointer.target - pointer.active) * 0.14;
+
+    drawMesh(t, false);
+    if (pointer.active > 0.01) drawMesh(t, true);
+    drawPulses(t);
+    drawLens();
   }
 
   var elapsed = 0, last = 0;
 
   function frame(now) {
     if (!last) last = now;
-    // Clamp the step so returning to a backgrounded tab doesn't jump the terrain.
     elapsed += Math.min((now - last) / 1000, 0.05);
     last = now;
     draw(elapsed);
@@ -389,19 +508,42 @@
     last = 0;
     raf = window.requestAnimationFrame(frame);
   }
+
   function pause() {
     if (!raf) return;
     window.cancelAnimationFrame(raf);
     raf = 0;
   }
 
-  function start() {
-    resize();
-    if (still.matches) { pause(); draw(elapsed); }
-    else play();
+  function setPointer(clientX, clientY, strength) {
+    pointer.tx = clientX;
+    pointer.ty = clientY;
+    pointer.target = strength;
+    pointer.visible = true;
   }
 
-  // Phones fire resize constantly as the address bar slides; coalesce them.
+  function pulseAt(clientX, clientY) {
+    pulses.push({
+      x: clientX,
+      y: clientY,
+      start: elapsed,
+      life: 0.92
+    });
+    if (pulses.length > MAX_PULSES) pulses.shift();
+  }
+
+  var touchHideTimer = 0;
+
+  function start() {
+    resize();
+    if (still.matches) {
+      pause();
+      draw(elapsed);
+    } else {
+      play();
+    }
+  }
+
   var pending = 0;
   function onResize() {
     window.clearTimeout(pending);
@@ -410,6 +552,43 @@
       if (changed && !raf) draw(elapsed);
     }, 140);
   }
+
+  window.addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'mouse') {
+      setPointer(e.clientX, e.clientY, 1);
+    } else if (e.isPrimary) {
+      window.clearTimeout(touchHideTimer);
+      setPointer(e.clientX, e.clientY, 1);
+    }
+  }, { passive: true });
+
+  window.addEventListener('pointerdown', function (e) {
+    window.clearTimeout(touchHideTimer);
+    /* Touch should snap to the finger immediately. Mouse keeps a tiny elegant lag. */
+    if (e.pointerType !== 'mouse') {
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+    }
+    setPointer(e.clientX, e.clientY, 1);
+    pulseAt(e.clientX, e.clientY);
+  }, { passive: true });
+
+  window.addEventListener('pointerup', function (e) {
+    if (e.pointerType !== 'mouse') {
+      pointer.target = 0.55;
+      touchHideTimer = window.setTimeout(function () {
+        pointer.target = 0;
+        pointer.visible = false;
+      }, 420);
+    }
+  }, { passive: true });
+
+  window.addEventListener('pointerleave', function (e) {
+    if (e.pointerType === 'mouse') {
+      pointer.target = 0;
+      pointer.visible = false;
+    }
+  }, { passive: true });
 
   window.addEventListener('resize', onResize, { passive: true });
   window.addEventListener('orientationchange', onResize, { passive: true });
