@@ -257,11 +257,24 @@ a:hover { color: var(--ink); }
   font-variant-numeric: tabular-nums;
 }
 .scorecard__band { font-size: 15px; font-weight: 700; color: var(--green-soft); }
-.marks { display: flex; gap: 7px; }
+.marks { display: flex; justify-content: space-between; gap: 7px; width: 100%;
+  max-width: calc(5 * clamp(28px, 5vw, 34px) + 4 * clamp(12px, 2.2vw, 19px)); }
 .marks svg { flex: none; width: clamp(28px, 5vw, 34px); height: clamp(28px, 5vw, 34px); }
 .pillar__marks { display: flex; gap: 5px; }
 .pillar__marks svg { flex: none; width: 21px; height: 21px; }
 .scorecard__note { font-size: 13px; line-height: 1.6; color: rgba(245,244,240,.72); text-wrap: pretty; }
+.compare { display: flex; flex-direction: column; gap: 9px; padding-top: 15px; border-top: 1px solid var(--ink-line); }
+.compare__head { font-size: 13px; font-weight: 600; line-height: 1.45; text-wrap: pretty; }
+.compare__chart { display: flex; align-items: flex-end; gap: 5px; height: 44px; }
+.compare__bar { flex: 1; min-height: 3px; border-radius: 3px 3px 0 0; background: #33333b; }
+.compare__bar.is-here { background: var(--green-soft); }
+.compare__bands { display: flex; gap: 5px; }
+.compare__band { flex: 1; text-align: center; font-family: var(--mono); font-size: 9px; color: rgba(245,244,240,.55); }
+.compare__band.is-here { color: var(--on-ink); font-weight: 600; }
+.compare__sub { font-size: 12px; line-height: 1.5; color: rgba(245,244,240,.55); }
+
+.resin { flex: none; width: 40px; height: 40px; }
+
 .meta { display: flex; flex-direction: column; gap: 8px; padding-top: 15px; border-top: 1px solid var(--ink-line); }
 .meta__row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .meta__k { font-size: 13px; color: rgba(245,244,240,.6); }
@@ -296,9 +309,9 @@ a:hover { color: var(--ink); }
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 14px;
-  align-items: start;
 }
 .part {
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 13px;
@@ -310,13 +323,7 @@ a:hover { color: var(--ink); }
 }
 .part:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(22,22,27,.10); }
 .part__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.part__tag {
-  width: 44px; height: 44px;
-  border-radius: 13px;
-  color: var(--paper);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 12px; font-weight: 600;
-}
+
 .part__verdict {
   font-family: var(--mono);
   font-size: 10px;
@@ -332,13 +339,10 @@ a:hover { color: var(--ink); }
 .part__reuse ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .dot { flex: none; margin-top: 7px; width: 5px; height: 5px; border-radius: var(--r-pill); background: var(--green); }
 
-.tone-good .part__tag { background: var(--green); }
 .tone-good .part__verdict { background: var(--green-bg); color: var(--green); }
 .tone-good { border-color: var(--green-bd); }
-.tone-warn .part__tag { background: var(--amber); }
 .tone-warn .part__verdict { background: var(--amber-bg); color: var(--amber); }
 .tone-warn { border-color: var(--amber-bd); }
-.tone-bad .part__tag { background: var(--red); }
 .tone-bad .part__verdict { background: var(--red-bg); color: var(--red); }
 .tone-bad { border-color: var(--red-bd); }
 
@@ -515,6 +519,12 @@ a:hover { color: var(--ink); }
       </div>
       <div class="marks" id="marks" role="img" aria-label="3.5 out of 5"></div>
       <p class="scorecard__note">Held back mainly by the sleeve label, which cannot be recycled with the bottle. The manufacturing and labour evidence is among the strongest we see.</p>
+      <div class="compare">
+        <span class="compare__head" id="cmp-head"></span>
+        <div class="compare__chart" id="cmp-chart" role="img"></div>
+        <div class="compare__bands" id="cmp-bands" aria-hidden="true"></div>
+        <span class="compare__sub" id="cmp-sub"></span>
+      </div>
       <div class="meta">
         <div class="meta__row"><span class="meta__k">Certified</span><span class="meta__v">5 September 2026</span></div>
         <div class="meta__row"><span class="meta__k">Valid to</span><span class="meta__v">August 2027</span></div>
@@ -695,6 +705,19 @@ a:hover { color: var(--ink); }
 
   var DOT = { good: '#2e6b46', warn: '#8a6a12', bad: '#9a3535' };
 
+  /* Resin identification codes, as printed on the pack. */
+  /* Mobius loop artwork, 1200pt source. */
+  var MOBIUS = ["m219.6 987.6c-34.801-61.199-14.398-114 8.3984-153.6 10.801-18 42-70.801 42-72 33.602-57.602 62.398-106.8 62.398-106.8 3.6016-7.1992 4.8008-7.1992 10.801-2.3984l72 42c2.3984 1.1992 3.6016 0 2.3984-1.1992l-72-271.2c0-2.3984-1.1992-2.3984-3.6016-2.3984l-270 71.996c-2.3984 0-2.3984 1.1992 0 2.3984l74.398 43.199c4.8008 2.3984 4.8008 3.6016 2.3984 7.1992 0 0-9.6016 18-28.801 49.199-39.602 64.801-54 154.8-20.398 247.2 0 0 0 1.1992 1.1992 1.1992 1.1992 3.6016 4.8008 12 9.6016 24 1.1992 2.3984 2.3984 4.8008 3.6016 7.1992 0 1.1992 1.1992 2.3984 1.1992 3.6016 1.1992 3.6016 3.6016 7.1992 4.8008 9.6016 32.398 60 75.602 100.8 121.2 127.2-7.1992-5.9961-14.398-15.598-21.598-26.395z","m481.2 836.4h-128.4c-25.199 0-45.602-10.801-62.398-28.801-26.398 44.398-70.801 109.2-38.398 164.4 31.199 55.199 90 79.199 171.6 79.199h57.602c2.3984 0 3.6016-2.3984 3.6016-3.6016l-0.007813-207.59c0-1.1992-1.1992-3.6016-3.6016-3.6016z","m975.6 225.6-74.398 42c-4.8008 2.3984-6 2.3984-8.3984-1.1992 0 0-10.801-16.801-27.602-49.199-36-66-106.8-124.8-204-141.6h-1.1992c-3.6016-1.1992-12-2.3984-26.398-3.6016h-7.1992-3.6016-10.801c-68.398-2.3984-124.8 14.398-170.4 42 10.801-2.3984 22.801-4.8008 36-4.8008 70.801 0 105.6 44.398 128.4 84 10.801 18 40.801 73.199 40.801 73.199 33.602 57.602 61.199 106.8 61.199 106.8 3.6016 7.1992 3.6016 7.1992-3.6016 10.801l-72 42c-2.3984 1.1992-2.3984 2.3984 0 2.3984l267.6 70.801c2.3984 1.1992 3.6016 0 3.6016-2.3984l73.199-271.2c1.1992-1.2031 1.1992-1.2031-1.1992 0z","m472.8 142.8c-63.602 0-112.8 38.398-154.8 108-20.398 34.801-24 42-28.801 50.398-1.1992 2.3984 0 4.8008 1.1992 6l180 103.2c1.1992 1.1992 3.6016 1.1992 4.8008-1.1992 12-21.602 15.602-27.602 64.801-111.6 13.199-21.602 32.398-33.602 56.398-39.602-25.199-46.797-60-115.2-123.6-115.2z","m903.6 729.6c13.199 21.602 13.199 45.602 6 68.398 50.398 0 129.6 6 162-49.199 31.199-55.199 24-117.6-16.801-188.4-20.398-34.801-24-42-28.801-50.398-1.1992-2.3984-3.6016-2.3984-6-1.1992l-180 103.2c-1.1992 1.1992-2.3984 2.3984-1.1992 4.8008 12 22.797 15.598 29.996 64.801 112.8z","m1099.2 769.2c-34.801 61.199-90 68.398-136.8 68.398h-72-135.6c-8.3984 0-8.3984 0-8.3984-8.3984v-82.801c0-2.3984-1.1992-2.3984-2.3984-1.1992l-196.8 196.8c-1.1992 1.1992-2.3984 2.3984 0 4.8008l198 199.2c1.1992 1.1992 2.3984 1.1992 2.3984-1.1992v-86.398c0-4.8008 1.1992-6 4.8008-6h56.398c78 0 168-33.602 231.6-114 3.6016-3.6016 7.1992-8.3984 10.801-14.398 44.398-64.801 62.398-128.4 61.199-188.4-1.1992 10.793-6 22.793-13.199 33.594z"];
+
+  var RESIN = { PET: { code: '1', name: 'PET' }, PVC: { code: '3', name: 'PVC' }, PAP: { code: '21', name: 'PAP' } };
+
+  /* Where this sits against every other rated SKU in its category. */
+  var CATEGORY = {
+    name: 'shower gels and body washes',
+    rated: 148, median: 2.5, better: 82,
+    spread: [{ band: 1, n: 14 }, { band: 2, n: 41 }, { band: 3, n: 58 }, { band: 4, n: 27 }, { band: 5, n: 8 }]
+  };
+
   function band(v) {
     return v >= 5 ? 'Defining' : v >= 4 ? 'Leading' : v >= 3 ? 'Advancing' : v >= 2 ? 'Building' : 'Starting';
   }
@@ -735,6 +758,37 @@ a:hover { color: var(--ink); }
     return svg;
   }
 
+  /* Mobius loop with the resin code, the mark already printed on the pack. */
+  function resinMark(tag, colour) {
+    var r = RESIN[tag] || { code: '', name: tag };
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 40 40');
+    svg.setAttribute('class', 'resin');
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'Resin code ' + r.code + ', ' + r.name);
+
+    function add(tag2, attrs, text) {
+      var n = document.createElementNS(NS, tag2);
+      for (var k in attrs) n.setAttribute(k, attrs[k]);
+      if (text != null) n.textContent = text;
+      svg.appendChild(n);
+    }
+    /* Mobius loop, drawn from the supplied 1200pt artwork and scaled to fit. */
+    var g = document.createElementNS(NS, 'g');
+    g.setAttribute('transform', 'translate(6.5,2.5) scale(0.0225)');
+    g.setAttribute('fill', colour);
+    MOBIUS.forEach(function (d) {
+      var p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', d);
+      g.appendChild(p);
+    });
+    svg.appendChild(g);
+    add('circle', { cx: 20, cy: 16, r: 6.4, fill: '#fff' });
+    add('text', { x: 20, y: 19.5, 'text-anchor': 'middle', 'font-family': "'IBM Plex Mono',monospace", 'font-size': r.code.length > 1 ? 9 : 11, 'font-weight': 600, fill: colour }, r.code);
+    add('text', { x: 20, y: 36.5, 'text-anchor': 'middle', 'font-family': "'IBM Plex Mono',monospace", 'font-size': 8, 'letter-spacing': 0.5, fill: colour }, r.name);
+    return svg;
+  }
+
   function markRow(host, value, onDark) {
     host.innerHTML = '';
     for (var i = 0; i < 5; i++) host.appendChild(mark(value, i, onDark));
@@ -760,10 +814,30 @@ a:hover { color: var(--ink); }
   marksEl.setAttribute('aria-label', rounded.toFixed(1) + ' out of 5');
   markRow(marksEl, rounded, true);
 
+  (function renderCompare() {
+    var head = document.getElementById('cmp-head');
+    var chart = document.getElementById('cmp-chart');
+    var sub = document.getElementById('cmp-sub');
+    var line = 'Higher than ' + CATEGORY.better + '% of rated ' + CATEGORY.name;
+    head.textContent = line;
+    chart.setAttribute('aria-label', line);
+    sub.textContent = CATEGORY.rated + ' rated in this category · median ' + CATEGORY.median.toFixed(1);
+
+    var bands = document.getElementById('cmp-bands');
+    var tallest = CATEGORY.spread.reduce(function (m, b) { return Math.max(m, b.n); }, 0);
+    CATEGORY.spread.forEach(function (b) {
+      var here = Math.floor(rounded) === b.band ? ' is-here' : '';
+      var bar = el('span', 'compare__bar' + here);
+      bar.style.height = Math.round((b.n / tallest) * 100) + '%';
+      chart.appendChild(bar);
+      bands.appendChild(el('span', 'compare__band' + here, String(b.band)));
+    });
+  })();
+
   /* -------------------------------------------------------------
      Disposal, by market
      ------------------------------------------------------------- */
-  var market = 'Hong Kong';
+  var market = 'Australia';
   var tabsEl = document.getElementById('markets');
   var partsEl = document.getElementById('parts');
   var noteEl = document.getElementById('disposal-note');
@@ -789,8 +863,9 @@ a:hover { color: var(--ink); }
       card.setAttribute('data-reveal', '');
       card.style.transitionDelay = (idx * 70) + 'ms';
 
+      var ink = p.tone === 'bad' ? '#9a3535' : p.tone === 'warn' ? '#8a6a12' : '#2e6b46';
       var top = el('div', 'part__top');
-      top.appendChild(el('span', 'part__tag', p.tag));
+      top.appendChild(resinMark(p.tag, ink));
       top.appendChild(el('span', 'part__verdict', p.verdict));
       card.appendChild(top);
 
@@ -945,12 +1020,16 @@ a:hover { color: var(--ink); }
   if (calm) {
     scoreEl.textContent = rounded.toFixed(1);
   } else {
-    var t0 = performance.now(), dur = 1100;
-    (function step(now) {
+    // Final value first, so the number is never stranded at zero if the tab
+    // is backgrounded and rAF never fires. The count-up is enhancement only.
+    scoreEl.textContent = rounded.toFixed(1);
+    var t0 = null, dur = 1100;
+    requestAnimationFrame(function step(now) {
+      if (t0 === null) t0 = now;
       var k = Math.min(1, (now - t0) / dur);
       scoreEl.textContent = ((1 - Math.pow(1 - k, 3)) * rounded).toFixed(1);
       if (k < 1) requestAnimationFrame(step);       // stops as soon as it settles
-    })(t0);
+    });
   }
 
   /* -------------------------------------------------------------
