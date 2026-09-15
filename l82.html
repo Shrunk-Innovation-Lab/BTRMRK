@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>Lab82 × BTRMRK — coming soon</title>
 <meta name="description" content="Lab82 and BTRMRK. Coming soon.">
@@ -20,7 +20,7 @@
 <style>
 /* ---------------------------------------------------------------
    Lab82 × BTRMRK — holding page
-   Drop Image1.jpg and Image2.jpg next to this file.
+   Drop Image1.jpg, Image2.jpg and btrmrk.png next to this file.
    To add more photos, edit the IMAGES list in the script below.
    --------------------------------------------------------------- */
 
@@ -36,7 +36,6 @@
   --rise:clamp(165px, 30vh, 340px);    /* how tall the vortex stands */
   --cw:clamp(86px, 9.4vw, 158px);      /* card width                 */
   --ch:calc(var(--cw) * 1.27);         /* card height                */
-  --spin:46s;                          /* one full revolution        */
 }
 
 *{box-sizing:border-box}
@@ -52,6 +51,11 @@ body{
   font-weight:300;
   -webkit-font-smoothing:antialiased;
   overflow:hidden;
+  overscroll-behavior:none;
+  touch-action:none;                 /* the whole surface is draggable */
+  -webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;
+  user-select:none;
 }
 
 .page{
@@ -61,7 +65,10 @@ body{
   display:grid;
   place-items:center;
   isolation:isolate;
+  cursor:grab;
 }
+
+.page.is-dragging{cursor:grabbing}
 
 /* ---------- the vortex ---------- */
 
@@ -81,14 +88,12 @@ body{
   top:48%;
   transform-style:preserve-3d;
   transform:rotateZ(-4deg) rotateX(5deg);
-  transition:transform .9s cubic-bezier(.2,.7,.2,1);
-  will-change:transform;
 }
 
 .vortex{
   position:absolute;
   transform-style:preserve-3d;
-  animation:spin var(--spin) linear infinite;
+  will-change:transform;
 }
 
 .card{
@@ -115,8 +120,6 @@ body{
   box-shadow:
     0 22px 46px -24px rgba(110,45,68,.6),
     0 0 0 1px rgba(255,255,255,.55);
-  animation:depth var(--spin) linear infinite;
-  will-change:opacity, filter;
 }
 
 .face img{
@@ -124,20 +127,7 @@ body{
   height:100%;
   object-fit:cover;
   display:block;
-}
-
-/* Front of the turn: crisp. Back of the turn: dissolving into the light. */
-@keyframes depth{
-  0%   {opacity:1;   filter:saturate(1.05) contrast(1.04) blur(0)}
-  30%  {opacity:.82; filter:saturate(.9)   contrast(.92)  blur(.3px)}
-  50%  {opacity:.3;  filter:saturate(.5)   contrast(.66)  blur(2.2px)}
-  70%  {opacity:.82; filter:saturate(.9)   contrast(.92)  blur(.3px)}
-  100% {opacity:1;   filter:saturate(1.05) contrast(1.04) blur(0)}
-}
-
-@keyframes spin{
-  from{transform:rotateY(0deg)}
-  to  {transform:rotateY(360deg)}
+  pointer-events:none;
 }
 
 @keyframes settle{
@@ -165,6 +155,7 @@ body{
   z-index:3;
   text-align:center;
   padding:0 24px;
+  pointer-events:none;
   text-shadow:0 0 34px rgba(252,245,247,.98), 0 0 14px rgba(252,245,247,.95), 0 0 5px rgba(252,245,247,.9);
   opacity:0;
   animation:settle 1.6s .45s ease-out forwards;
@@ -218,7 +209,6 @@ body{
   color:var(--deep);
 }
 
-
 /* ---------- smaller screens ---------- */
 
 @media (max-width:820px){
@@ -231,20 +221,13 @@ body{
 
 @media (max-width:480px){
   .stage{perspective:900px}
-}
-
-/* ---------- stillness on request ---------- */
-
-@media (prefers-reduced-motion:reduce){
-  .vortex, .face{animation-play-state:paused}
-  .stage, .lockup{animation-duration:.01ms; opacity:1}
-  .tilt{transition:none}
+  .face{box-shadow:0 14px 30px -20px rgba(110,45,68,.55), 0 0 0 1px rgba(255,255,255,.5)}
 }
 </style>
 </head>
 
 <body>
-<main class="page">
+<main class="page" id="page">
 
   <div class="stage" aria-hidden="true">
     <div class="tilt" id="tilt">
@@ -267,68 +250,165 @@ body{
 <script>
 (function () {
   /* Photos used in the vortex. Add more files here as you add them
-     to the folder — the spiral rebuilds itself around the list. */
-  var IMAGES = ['Image1.jpg', 'Image2.jpg', 'Image3.jpg', 'Image4.jpg', 'Image5.jpg', 'Image6.jpg', 'Image7.jpg,' 'Image8.jpg'];
-
-  var COUNT   = 30;    // cards in the spiral
-  var TURNS   = 2.6;   // how many times it wraps around
-  var SECONDS = 46;    // must match --spin in the CSS
+     to the folder — the spiral rebuilds itself around the list.
+     Any mix of .jpg / .png / .webp is fine. */
+  var IMAGES = ['Image1.jpg', 'Image2.jpg', 'Image3.jpg', 'Image4.jpg'];
 
   var vortex = document.getElementById('vortex');
+  var tilt   = document.getElementById('tilt');
+  var page   = document.getElementById('page');
   if (!vortex) return;
 
-  var frag = document.createDocumentFragment();
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var phone = matchMedia('(max-width: 600px)').matches;
+
+  var COUNT = phone ? 20 : 30;   // fewer cards to draw on a phone
+  var TURNS = 2.6;               // how many times the spiral wraps
+  var BLUR  = phone ? 0 : 2.4;   // blur is the costly part — off on phones
+  var BASE  = still ? 0 : 360 / 46;  // degrees per second at rest
+
+  /* ---------- build the spiral ---------- */
+
+  var cards = [];
+  var frag  = document.createDocumentFragment();
 
   for (var i = 0; i < COUNT; i++) {
-    var t = i / (COUNT - 1);          // 0 at the base, 1 at the top
-    var u = t * 2 - 1;                // -1 .. 1
-    var angle = (i * 360 * TURNS / COUNT) % 360;
+    var u = (i / (COUNT - 1)) * 2 - 1;        // -1 at the base, 1 at the top
+    var a = (i * 360 * TURNS / COUNT) % 360;
 
     var card = document.createElement('div');
     card.className = 'card';
-    card.style.setProperty('--a', angle.toFixed(2));
+    card.style.setProperty('--a', a.toFixed(2));
     card.style.setProperty('--y', u.toFixed(3));
-    // barrel: widest through the middle, drawing in top and bottom
     card.style.setProperty('--r', (0.55 + 0.45 * Math.cos(u * Math.PI / 2)).toFixed(3));
     card.style.setProperty('--s', (0.78 + 0.22 * Math.cos(u * Math.PI / 2)).toFixed(3));
 
     var face = document.createElement('div');
     face.className = 'face';
-    // phase-lock the fade to this card's place on the turn
-    face.style.animationDelay = ((angle / 360 - 1) * SECONDS).toFixed(2) + 's';
 
     var img = document.createElement('img');
     img.src = IMAGES[i % IMAGES.length];
     img.alt = '';
-    img.loading = i < 12 ? 'eager' : 'lazy';
+    img.loading = i < 10 ? 'eager' : 'lazy';
     img.decoding = 'async';
-    // shift the crop and flip alternates so repeats don't read as repeats
     img.style.objectPosition = (18 + (i * 29) % 64) + '% ' + (20 + (i * 41) % 60) + '%';
     if (i % 3 === 1) img.style.transform = 'scaleX(-1)';
-    // if a file is missing, the card stays a soft blush panel
     img.addEventListener('error', function () { this.remove(); });
 
     face.appendChild(img);
     card.appendChild(face);
     frag.appendChild(card);
+
+    cards.push({face: face, angle: a, o: -1, f: ''});
   }
 
   vortex.appendChild(frag);
 
-  /* Lean the vortex toward the pointer. */
-  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var fine  = window.matchMedia('(pointer: fine)');
-  if (still.matches || !fine.matches) return;
+  /* ---------- state ---------- */
 
-  var tilt = document.getElementById('tilt');
-  window.addEventListener('pointermove', function (e) {
-    var x = (e.clientX / window.innerWidth  - 0.5) * 2;
-    var y = (e.clientY / window.innerHeight - 0.5) * 2;
-    tilt.style.transform =
-      'rotateZ(' + (-4 + x * 2.5).toFixed(2) + 'deg) ' +
-      'rotateX(' + (5 - y * 5).toFixed(2) + 'deg) ' +
-      'rotateY(' + (x * 5).toFixed(2) + 'deg)';
+  var spin = 0;        // current rotation, degrees
+  var drift = 0;       // extra spin from a throw, degrees per second
+  var bias = 0;        // gentle speed-up from cursor position
+  var tx = 0, ty = 0;  // where the tilt is
+  var gx = 0, gy = 0;  // where the tilt wants to be
+
+  var dragging = false, lastX = 0, lastY = 0, lastT = 0;
+
+  /* ---------- pointer: drag to spin, move to lean ---------- */
+
+  page.addEventListener('pointerdown', function (e) {
+    dragging = true;
+    drift = 0;
+    lastX = e.clientX; lastY = e.clientY; lastT = e.timeStamp;
+    page.classList.add('is-dragging');
+    try { page.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+
+  page.addEventListener('pointermove', function (e) {
+    if (dragging) {
+      var dx = e.clientX - lastX;
+      var dt = Math.max(e.timeStamp - lastT, 8) / 1000;
+      spin += dx * 0.42;                        // 1px of drag ≈ 0.42°
+      drift = (dx * 0.42) / dt;                 // remember the throw
+      lastX = e.clientX; lastY = e.clientY; lastT = e.timeStamp;
+    }
+    if (hover || dragging) aim(e.clientX, e.clientY);
   }, {passive: true});
+
+  function release(e) {
+    if (!dragging) return;
+    dragging = false;
+    page.classList.remove('is-dragging');
+    drift = Math.max(-900, Math.min(900, drift));   // cap the throw
+    try {
+      if (e && e.pointerId != null && page.hasPointerCapture(e.pointerId)) {
+        page.releasePointerCapture(e.pointerId);
+      }
+    } catch (err) {}
+  }
+  page.addEventListener('pointerup', release);
+  page.addEventListener('pointercancel', release);
+  page.addEventListener('pointerleave', function () { if (!dragging) { gx = 0; gy = 0; bias = 0; } });
+
+  function aim(px, py) {
+    var nx = (px / innerWidth  - 0.5) * 2;
+    var ny = (py / innerHeight - 0.5) * 2;
+    gx = nx;
+    gy = ny;
+    if (hover && !dragging) bias = nx * BASE * 0.6;   // lean right, spin faster
+  }
+
+  /* ---------- the loop ---------- */
+
+  var prev = 0;
+
+  function frame(now) {
+    var dt = prev ? Math.min((now - prev) / 1000, 0.05) : 0.016;
+    prev = now;
+
+    if (!dragging) {
+      spin += (BASE + bias + drift) * dt;
+      drift *= Math.exp(-2.6 * dt);          // the throw runs out
+    }
+    if (spin > 3600 || spin < -3600) spin %= 360;
+
+    vortex.style.transform = 'rotateY(' + spin.toFixed(2) + 'deg)';
+
+    /* the lean chases the pointer instead of trailing a second behind it */
+    var k = still ? 1 : 1 - Math.exp(-11 * dt);
+    tx += (gx - tx) * k;
+    ty += (gy - ty) * k;
+    tilt.style.transform =
+      'rotateZ(' + (-4 + tx * 3.5).toFixed(2) + 'deg) ' +
+      'rotateX(' + (5 - ty * 9).toFixed(2) + 'deg) ' +
+      'rotateY(' + (tx * 9).toFixed(2) + 'deg)';
+
+    /* depth: crisp at the front, dissolving into the light at the back */
+    for (var i = 0; i < cards.length; i++) {
+      var c = cards[i];
+      var f = (Math.cos((spin + c.angle) * Math.PI / 180) + 1) / 2;
+      var o = 0.26 + 0.74 * Math.pow(f, 0.75);
+      if (Math.abs(o - c.o) > 0.008) {
+        c.face.style.opacity = c.o = o;
+      }
+      if (BLUR) {
+        var s = (0.5 + 0.55 * f).toFixed(2);
+        var n = (BLUR * Math.pow(1 - f, 1.5)).toFixed(2);
+        var str = 'blur(' + n + 'px) saturate(' + s + ') contrast(' + (0.66 + 0.38 * f).toFixed(2) + ')';
+        if (str !== c.f) c.face.style.filter = c.f = str;
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+
+  /* pause the work entirely when the tab is hidden */
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) prev = 0;
+  });
 })();
 </script>
 </body>
