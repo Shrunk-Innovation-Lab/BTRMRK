@@ -33,7 +33,7 @@
   --ink:#3A2730;
 
   --radius:clamp(200px, 27vw, 490px);  /* how wide the vortex swings */
-  --rise:clamp(165px, 30vh, 340px);    /* how tall the vortex stands */
+  --rise:clamp(210px, 43vh, 500px);    /* how tall the vortex stands */
   --cw:clamp(86px, 9.4vw, 158px);      /* card width                 */
   --ch:calc(var(--cw) * 1.27);         /* card height                */
 }
@@ -119,8 +119,8 @@ body{
   overflow:hidden;
   background:linear-gradient(150deg,#F6C9D6,#E9A3B8);
   box-shadow:
-    0 22px 46px -24px rgba(110,45,68,.6),
-    0 0 0 1px rgba(255,255,255,.55);
+    0 14px 28px -20px rgba(110,45,68,.55),
+    0 0 0 1px rgba(255,255,255,.5);
 }
 
 .face img{
@@ -273,7 +273,7 @@ body{
   var hover = matchMedia('(hover: hover) and (pointer: fine)').matches;
   var phone = matchMedia('(max-width: 600px)').matches;
 
-  var COUNT = phone ? 20 : 30;   // fewer cards to draw on a phone
+  var COUNT = phone ? 24 : 32;   // fewer cards to draw on a phone
   var TURNS = 2.6;               // how many times the spiral wraps
   var BASE  = still ? 0 : 360 / 46;  // degrees per second at rest
 
@@ -388,7 +388,7 @@ body{
 
   /* ---------- the loop ---------- */
 
-  var prev = 0;
+  var prev = 0, mark = 0, ticks = 0, trims = 0;
 
   function frame(now) {
     var dt = prev ? Math.min((now - prev) / 1000, 0.05) : 0.016;
@@ -417,6 +417,24 @@ body{
       var f = (Math.cos((spin + c.angle) * Math.PI / 180) + 1) / 2;
       var o = 0.2 + 0.8 * Math.pow(f, 0.8);
       if (Math.abs(o - c.o) > 0.008) c.face.style.opacity = c.o = o;
+    }
+
+    /* if the machine can't keep up, thin the spiral rather than stutter */
+    ticks++;
+    if (!mark) mark = now;
+    if (trims < 1 && now - mark > 2200) {
+      if (ticks / ((now - mark) / 1000) < 38) {
+        var keep = [];
+        for (var j = 0; j < cards.length; j++) {
+          if (j % 4 === 3) cards[j].face.parentNode.style.display = 'none';
+          else keep.push(cards[j]);
+        }
+        cards = keep;
+        trims++;
+      } else {
+        trims = 1;
+      }
+      mark = now; ticks = 0;
     }
 
     requestAnimationFrame(frame);
