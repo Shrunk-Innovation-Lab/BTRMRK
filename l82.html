@@ -20,7 +20,7 @@
 <style>
 /* ---------------------------------------------------------------
    Lab82 × BTRMRK — holding page
-   Drop Image1.jpg … Image12.jpg and btrmrk.png next to this file.
+   Drop Image1.jpg … Image30.jpg and btrmrk.png next to this file.
    To add more photos, edit the IMAGES list in the script below.
    --------------------------------------------------------------- */
 
@@ -254,12 +254,15 @@ body{
      to the folder — the spiral rebuilds itself around the list.
      Any mix of .jpg / .png / .webp is fine. */
   var IMAGES = [
-    'Image1.jpg',  'Image2.jpg',  'Image3.jpg',  'Image4.jpg',
-    'Image5.jpg',  'Image6.jpg',  'Image7.jpg',  'Image8.jpg',
-    'Image9.jpg',  'Image10.jpg', 'Image11.jpg', 'Image12.jpg',
-    'Image13.jpg',  'Image14.jpg', 'Image15.jpg', 'Image16.jpg',
-    'Image17.jpg',  'Image18.jpg', 'Image19.jpg', 'Image20.jpg'
+    'Image1.jpg', 'Image2.jpg', 'Image3.jpg', 'Image4.jpg', 'Image5.jpg',
+    'Image6.jpg', 'Image7.jpg', 'Image8.jpg', 'Image9.jpg', 'Image10.jpg',
+    'Image11.jpg', 'Image12.jpg', 'Image13.jpg', 'Image14.jpg', 'Image15.jpg',
+    'Image16.jpg', 'Image17.jpg', 'Image18.jpg', 'Image19.jpg', 'Image20.jpg',
+    'Image21.jpg', 'Image22.jpg', 'Image23.jpg', 'Image24.jpg', 'Image25.jpg',
+    'Image26.jpg', 'Image27.jpg', 'Image28.jpg', 'Image29.jpg', 'Image30.jpg'
   ];
+
+
 
   var vortex = document.getElementById('vortex');
   var tilt   = document.getElementById('tilt');
@@ -278,6 +281,12 @@ body{
 
   var cards = [];
   var frag  = document.createDocumentFragment();
+
+  function gcd(a, b) { while (b) { var t = b; b = a % b; a = t; } return a; }
+  var STRIDE = 1;
+  for (var k = Math.max(2, Math.round(IMAGES.length / 2.6)); k < IMAGES.length; k++) {
+    if (gcd(k, IMAGES.length) === 1) { STRIDE = k; break; }
+  }
 
   /* fixed seed, so the scatter is the same on every visit */
   var seed = 0x9e3779b9;
@@ -306,7 +315,7 @@ body{
     face.className = 'face';
 
     var img = document.createElement('img');
-    img.src = IMAGES[(i * 5) % IMAGES.length];
+    img.src = IMAGES[(i * STRIDE) % IMAGES.length];
     img.alt = '';
     img.loading = i < 10 ? 'eager' : 'lazy';
     img.decoding = 'async';
