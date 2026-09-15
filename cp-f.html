@@ -158,10 +158,11 @@ function init3D(){
 
   /* lollipop disc: a lathed profile, domed faces rounding into the rim */
   var R = 1.55;            // disc radius
-  var TH = 0.30;           // half thickness at the centre
+  var TH = 0.32;           // half thickness at the centre
   var profile = [
-    [0.00, 1.00],[0.30, 0.995],[0.58, 0.975],[0.80, 0.945],
-    [0.95, 0.90],[1.00, 0.78],[1.00, 0.00]
+    [0.00, 1.00],[0.26, 0.995],[0.50, 0.980],[0.70, 0.950],
+    [0.82, 0.910],[0.90, 0.840],[0.955, 0.720],[0.987, 0.540],
+    [1.000, 0.300],[1.000, 0.000]
   ];
   var pts = [];
   var pi;
@@ -238,10 +239,10 @@ function init3D(){
     });
 
     // a shallow cap that follows the dome, sitting just beneath the surface
-    var capProfile = [[0.00,1.00],[0.24,0.997],[0.46,0.985],[0.66,0.963],[0.82,0.932],[0.93,0.885],[0.985,0.80]];
+    var capProfile = [[0.00,1.00],[0.22,0.997],[0.42,0.986],[0.60,0.965],[0.74,0.935],[0.84,0.885],[0.905,0.800]];
     var capPts = [], i;
     for(i = 0; i < capProfile.length; i++){
-      capPts.push(new THREE.Vector2(capProfile[i][0]*R*0.985, capProfile[i][1]*TH*0.90));
+      capPts.push(new THREE.Vector2(capProfile[i][0]*R*0.97, capProfile[i][1]*TH*0.90));
     }
     var capGeo = new THREE.LatheGeometry(capPts, SMALL?48:72);
     capGeo.rotateX(Math.PI/2);
@@ -380,10 +381,10 @@ function init3D(){
     // rejection-sample a point inside the disc, kept clear of the rim
     var px, py, rr;
     do {
-      px = (rand()*2-1) * (R - 0.26);
-      py = (rand()*2-1) * (R - 0.26);
+      px = (rand()*2-1) * (R - 0.34);
+      py = (rand()*2-1) * (R - 0.34);
       rr = Math.sqrt(px*px + py*py);
-    } while (rr > R - 0.26);
+    } while (rr > R - 0.34);
     var room = TH * Math.sqrt(Math.max(0, 1 - (rr/R)*(rr/R)));  // thinner near the rim
     obj.position.set(px, py, (rand()*2-1) * Math.max(0.02, room - 0.10));
     obj.rotation.set(rand()*6.283, rand()*6.283, rand()*6.283);
