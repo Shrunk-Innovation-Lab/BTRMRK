@@ -84,7 +84,26 @@ function init3D(){
     var c = document.createElement('canvas');
     c.width = 1024; c.height = 512;
     var g = c.getContext('2d');
-    g.fillStyle = '#06020b'; g.fillRect(0,0,1024,512);
+    // a lifted base so grazing reflections aren't reflecting pure black
+    var base = g.createLinearGradient(0,0,0,512);
+    base.addColorStop(0,'#2b2340');
+    base.addColorStop(0.42,'#17101f');
+    base.addColorStop(1,'#0b0512');
+    g.fillStyle = base; g.fillRect(0,0,1024,512);
+
+    // wrap-around softbox strip — this is what reads as "glass" on the rim
+    var strip = g.createLinearGradient(0,86,0,190);
+    strip.addColorStop(0,'rgba(255,255,255,0)');
+    strip.addColorStop(0.5,'rgba(255,255,255,.95)');
+    strip.addColorStop(1,'rgba(255,255,255,0)');
+    g.fillStyle = strip; g.fillRect(0,86,1024,104);
+
+    // second, dimmer strip low down for the underside of the rim
+    var strip2 = g.createLinearGradient(0,330,0,400);
+    strip2.addColorStop(0,'rgba(210,225,255,0)');
+    strip2.addColorStop(0.5,'rgba(210,225,255,.45)');
+    strip2.addColorStop(1,'rgba(210,225,255,0)');
+    g.fillStyle = strip2; g.fillRect(0,330,1024,70);
     function blob(x,y,r,col,a){
       var rg = g.createRadialGradient(x,y,0,x,y,r);
       rg.addColorStop(0,col); rg.addColorStop(1,'rgba(0,0,0,0)');
@@ -129,11 +148,13 @@ function init3D(){
   /* ---------- lights on top of the env ---------- */
   var key = new THREE.DirectionalLight(0xffffff, 2.4);
   key.position.set(-3, 5, 4); scene.add(key);
-  var rimPink = new THREE.PointLight(0xff3d92, 45, 0, 2);
-  rimPink.position.set(3.4, 1.2, -2.2); scene.add(rimPink);
-  var rimViolet = new THREE.PointLight(0x9a86ff, 38, 0, 2);
-  rimViolet.position.set(-3.6, -1.4, -2.0); scene.add(rimViolet);
-  scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+  var rimPink = new THREE.PointLight(0xff3d92, 70, 0, 2);
+  rimPink.position.set(4.2, 0.8, -1.4); scene.add(rimPink);
+  var rimViolet = new THREE.PointLight(0xb9a6ff, 60, 0, 2);
+  rimViolet.position.set(-4.2, -0.9, -1.2); scene.add(rimViolet);
+  var topRim = new THREE.PointLight(0xffffff, 55, 0, 2);
+  topRim.position.set(0.4, 3.6, -1.0); scene.add(topRim);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
   /* ---------- the bar ---------- */
   function roundedShape(w,h,rt,rb){
@@ -174,15 +195,18 @@ function init3D(){
   var ice = new THREE.MeshPhysicalMaterial({
     color:0xffffff,
     transmission:1,
-    thickness:0.95,
-    ior:1.46,
-    roughness:0.055,
+    thickness:0.62,
+    ior:1.50,
+    roughness:0.035,
     metalness:0,
     clearcoat:1,
-    clearcoatRoughness:0.07,
-    attenuationColor:new THREE.Color(0xc4d6ff),
-    attenuationDistance:2.6,
-    envMapIntensity:1.6,
+    clearcoatRoughness:0.04,
+    attenuationColor:new THREE.Color(0xdfeaff),
+    attenuationDistance:6.0,
+    envMapIntensity:2.2,
+    specularIntensity:1.0,
+    iridescence:0.12,
+    iridescenceIOR:1.3,
     transparent:true
   });
   var disc = new THREE.Mesh(discGeo, ice);
@@ -295,7 +319,7 @@ function init3D(){
     nm.wrapS = nm.wrapT = THREE.RepeatWrapping;
     nm.repeat.set(5, 3);
     ice.clearcoatNormalMap = nm;
-    ice.clearcoatNormalScale = new THREE.Vector2(0.16, 0.16);
+    ice.clearcoatNormalScale = new THREE.Vector2(0.07, 0.07);
     ice.needsUpdate = true;
   })();
 
@@ -412,8 +436,8 @@ function init3D(){
     camera.aspect = aspect;
 
     // how much of the frame the pop may fill — leave room for logo + caption
-    var fitV = portrait ? 0.50 : 0.66;
-    var fitH = portrait ? 0.62 : 0.50;
+    var fitV = portrait ? 0.70 : 0.66;
+    var fitH = portrait ? 0.92 : 0.50;
 
     var half = Math.tan(THREE.MathUtils.degToRad(camera.fov)/2);
     var dV = (OBJ_H/fitV/2)/half;              // distance needed to fit height
