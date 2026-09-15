@@ -189,8 +189,27 @@ function init3D(){
   var pi;
   for(pi=0; pi<profile.length; pi++) pts.push(new THREE.Vector2(profile[pi][0]*R, profile[pi][1]*TH));
   for(pi=profile.length-2; pi>=0; pi--) pts.push(new THREE.Vector2(profile[pi][0]*R, -profile[pi][1]*TH));
-  var discGeo = new THREE.LatheGeometry(pts, SMALL?36:64);
-  discGeo.rotateX(Math.PI/2);   // lay the disc so it faces the camera
+  var discGeo = new THREE.LatheGeometry(pts, SMALL?700:1100);
+  discGeo.rotateX(Math.PI/2);   // lay the disc so it faces the camera — axis is now Z
+
+  /* fluting: scallop the radius around the rim so the edge is ridged,
+     the grooves running across the thickness the way a moulded bar's do */
+  (function flute(geo, count, amp, from){
+    var pos = geo.attributes.position, i, x, y, rr, t, f, s;
+    for(i = 0; i < pos.count; i++){
+      x = pos.getX(i); y = pos.getY(i);
+      rr = Math.sqrt(x*x + y*y);
+      if(rr < 1e-4) continue;
+      t = (rr/R - from) / (1 - from);
+      t = Math.max(0, Math.min(1, t));
+      t = t*t*(3 - 2*t);                       // ease in, so the faces stay smooth
+      f = Math.sin(Math.atan2(y, x) * count) * amp * t;
+      s = (rr + f)/rr;
+      pos.setX(i, x*s); pos.setY(i, y*s);
+    }
+    pos.needsUpdate = true;
+    geo.computeVertexNormals();
+  })(discGeo, 100, 0.00292, 0.74);
 
   var ice = new THREE.MeshPhysicalMaterial({
     color:0xffffff,
