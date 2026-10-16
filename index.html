@@ -6,6 +6,7 @@
 <title>BTRMRK — under construction</title>
 <meta name="description" content="BTRMRK is building a simpler way to understand the impact behind the products you buy. Site under construction.">
 <meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' fill='%2316292c'><path d='M289.01,518.68l174.8,202.05c6.65,7.98,13.96,13.29,21.93,17.28,8.64,3.32,17.28,5.31,25.92,5.31s17.28-1.99,25.92-5.31c8.64-3.99,15.95-9.31,22.6-17.28l200.73-231.3,54.5-62.48,90.39-105.02c-2-5.32-4.65-9.97-7.98-14.62-7.98-10.63-17.28-18.61-28.58-22.6-11.96-3.99-23.93-5.32-37.22-2.66-12.63,1.99-23.93,9.3-33.9,19.94l-285.8,330.33-45.18-52.2c-33.78-15.46-72.33-21.44-113.54-18.12-15.95,1.33-31.9,3.99-47.85,7.98l-16.62,2.66,0,0Z'/><path d='M771.5,477.47v289.12h86.4v-388.83l-86.4,99.71Z'/><path d='M252.46,463.51l-80.42-92.39c-9.97-10.63-21.27-17.95-33.9-19.94-13.29-2.66-25.26-1.33-37.22,2.66-11.3,3.99-20.61,11.96-28.58,22.6-7.98,10.63-11.96,23.26-11.96,37.88v352.28h86.4v-335.66l27.25,31.24c22.6,0,45.85,0,69.11,0,3.32,0,6.65,.66,9.3,1.33h0Z'/></svg>">
 
 <!-- ============================================================
      EDIT THESE AND YOU'RE DONE:
@@ -98,7 +99,7 @@
   .rail{
     display:flex;
     justify-content:space-between;
-    align-items:baseline;
+    align-items:center;
     gap:16px;
     flex-wrap:wrap;
     font-size:.82rem;
@@ -107,11 +108,14 @@
     border-bottom:1px solid var(--grid-bold);
     padding-bottom:10px;
   }
+  /* Real BTRMRK wordmark, inlined so it inherits --ink via currentColor.
+     Aspect is 11.46:1, so it is sized by height and the width follows. */
   .logotype{
-    font-variation-settings:"wdth" 112,"wght" 800;
-    font-size:1rem;
-    letter-spacing:-.01em;
+    display:block;
+    height:clamp(13px, 3.2vw, 19px);
+    width:auto;
     color:var(--ink);
+    flex:0 0 auto;
   }
 
   /* ---------- centre stack ---------- */
@@ -216,8 +220,6 @@
       transform:none;
     }
   }
-
-
 </style>
 </head>
 <body>
@@ -228,7 +230,16 @@
 <div class="sheet">
 
   <div class="rail">
-    <span class="logotype">BTRMRK</span>
+    <svg class="logotype" viewBox="0 0 2192.82 191.39" fill="currentColor" role="img" aria-label="BTRMRK">
+      <path d="M271.11,66.56c.82-10.45-.55-20.35-4.95-29.15-4.13-9.07-10.45-16.77-18.97-22.82-8.52-6.32-18.97-9.35-30.8-9.35H0v180.93h216.4c11.82,0,22.27-3.03,30.8-9.35,8.52-6.05,14.85-13.75,18.97-22.82,4.4-8.8,5.77-18.7,4.95-29.15-1.1-10.72-5.22-20.35-12.37-29.15,7.15-8.8,11.27-18.42,12.37-29.15ZM227.94,141.63c-2.75,3.3-6.32,4.95-11.55,4.95H39.59v-31.07h176.8c5.22,0,9.08,1.65,11.55,4.95,2.75,3.03,4.12,6.88,4.12,10.72s-1.37,7.42-4.12,10.45ZM227.94,76.73c-2.75,3.3-6.32,4.95-11.55,4.95H39.59v-36.57h176.8c5.22,0,9.08,1.65,11.55,4.95,2.75,3.3,4.12,7.42,4.12,12.1s-1.37,11.27-4.12,14.57Z"/>
+      <path d="M319.49,45.11h100.72v141.07h39.59V45.11h100.72V5.24h-241.03v39.87Z"/>
+      <path d="M864.63,66.56c.82-10.45-.55-20.35-4.95-29.15-4.13-9.07-10.45-16.77-18.97-22.82-8.52-6.32-18.97-9.35-30.8-9.35h-216.4v180.93h39.59v-55.54h115.3l92.13,55.54h72.6l-92.13-55.54h4.95c11.82,0,22.27-3.03,30.8-9.35,8.52-6.05,14.85-13.75,18.97-22.82,4.4-8.8,5.77-18.7,4.95-29.15-1.1-10.72-5.22-20.35-12.37-29.15,7.15-8.8,11.27-18.42,12.37-29.15ZM821.46,76.73c-2.75,3.3-6.32,4.95-11.55,4.95h-176.8v-36.57h176.8c5.22,0,9.08,1.65,11.55,4.95,2.75,3.3,4.12,7.42,4.12,12.1s-1.37,11.27-4.12,14.57Z"/>
+      <path d="M1180.3,10.19l-150.4,173.8-23.78-27.47c-17.78-8.14-38.06-11.28-59.74-9.54-8.39,.7-16.79,2.1-25.18,4.2l-8.75,1.4,91.98,106.33c3.5,4.2,7.35,6.99,11.54,9.09,4.55,1.75,9.09,2.8,13.64,2.8s9.09-1.05,13.64-2.8c4.55-2.1,8.39-4.9,11.89-9.09l105.62-121.74,28.68-32.88,47.56-55.26c-1.05-2.8-2.45-5.25-4.2-7.69-4.2-5.59-9.09-9.79-15.04-11.89-6.29-2.1-12.59-2.8-19.58-1.4-6.64,1.05-12.59,4.9-17.84,10.49Z"/>
+      <path d="M1434.78,98.96v152.14h45.46V46.49l-45.46,52.47Z"/>
+      <path d="M1161.74,91.61l-42.31-48.62c-5.25-5.59-11.19-9.44-17.84-10.49-6.99-1.4-13.29-.7-19.58,1.4-5.94,2.1-10.84,6.29-15.04,11.89-4.2,5.59-6.29,12.24-6.29,19.93v185.37h45.46V97.7l14.34,16.44c11.89,0,24.13,0,36.37,0,1.75,0,3.5,.35,4.9,.7h0Z"/>
+      <path d="M1807.83,66.56c.82-10.45-.55-20.35-4.95-29.15-4.13-9.07-10.45-16.77-18.97-22.82-8.52-6.32-18.97-9.35-30.8-9.35h-216.4v180.93h39.59v-55.54h115.3l92.13,55.54h72.6l-92.13-55.54h4.95c11.82,0,22.27-3.03,30.8-9.35,8.52-6.05,14.85-13.75,18.97-22.82,4.4-8.8,5.77-18.7,4.95-29.15-1.1-10.72-5.22-20.35-12.37-29.15,7.15-8.8,11.27-18.42,12.37-29.15ZM1764.66,76.73c-2.75,3.3-6.32,4.95-11.55,4.95h-176.8v-36.57h176.8c5.22,0,9.08,1.65,11.55,4.95,2.75,3.3,4.12,7.42,4.12,12.1s-1.37,11.27-4.12,14.57Z"/>
+      <path d="M2192.82,5.24h-63.52l-95.43,85.51h-77.55V5.24h-39.59v180.93h39.59v-85.51h77.55l95.43,85.51h63.52l-100.93-90.46,100.93-90.46Z"/>
+    </svg>
     <span>Under construction</span>
   </div>
 
@@ -249,48 +260,27 @@
 </div>
 
 <script>
-/* Interactive wireframe survey mesh.
-   Foreground content/layout is untouched.
-   Interaction lives entirely in the background canvas:
-   - desktop: a subtle lens follows the mouse and reveals a darker,
-     slightly lifted patch of terrain
-   - click/tap: three contour rings expand from the exact interaction point
-   - mobile: drag the lens with your finger; release to let it fade away
-*/
+/* Wireframe survey mesh: a ground plane in real perspective, drifting toward
+   the viewer. No libraries — the projection is eight lines of maths. */
 (function () {
   var canvas = document.getElementById('bg');
   if (!canvas || !canvas.getContext) return;
   var ctx = canvas.getContext('2d');
 
-  var COLS = 30,
-      ROWS = 34,
-      XS   = 1.15,
-      ZS   = 1.0,
-      NEAR = 1.4,
-      EYE  = 1.55,
-      SPEED = 0.55;
+  var COLS = 30,     // columns across
+      ROWS = 34,     // rows into the distance
+      XS   = 1.15,   // column spacing (world units)
+      ZS   = 1.0,    // row spacing (recomputed per viewport)
+      NEAR = 1.4,    // nearest row
+      EYE  = 1.55,   // camera height above the plane (recomputed per viewport)
+      SPEED = 0.55;  // world units per second, toward the viewer
 
   var w = 0, h = 0, cx = 0, cy = 0, f = 0, raf = 0;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var finePointer = window.matchMedia('(pointer:fine)');
-
-  /* Pointer is stored in CSS-pixel coordinates because the canvas context is
-     scaled to CSS pixels after resize(). */
-  var pointer = {
-    x: 0,
-    y: 0,
-    tx: 0,
-    ty: 0,
-    active: 0,
-    target: 0,
-    visible: false
-  };
-
-  var pulses = [];
-  var MAX_PULSES = 4;
-  var LENS_RADIUS = 118;
 
   function resize() {
+    // Measure the canvas box itself, not window.innerHeight — on mobile the
+    // two disagree while the address bar slides in and out.
     var box = canvas.getBoundingClientRect();
     var nw = Math.round(box.width)  || window.innerWidth;
     var nh = Math.round(box.height) || window.innerHeight;
@@ -299,114 +289,87 @@
     w = nw;
     h = nh;
 
-    /* Preserve the user's existing mobile mesh settings. */
+    // Phones need a FINER mesh, not a coarser one. A narrow viewport with a wide
+    // lens puts mid-screen at only z~3, where column spacing is f*XS/z — at
+    // XS 1.5 that is 150px apart, i.e. three lines on the whole screen. Tighter
+    // spacing and a nearer horizon give the same line count a real mesh.
     var narrow = w < 700;
     ROWS = narrow ? 15   : 34;
     ZS   = narrow ? 0.8  : 1.0;
     XS   = narrow ? 0.55 : 1.15;
-    LENS_RADIUS = narrow ? 92 : 118;
 
     cx = w / 2;
+
+    // Focal length from a fixed ~70 degree horizontal field of view. Deriving it
+    // from height instead turns a tall phone into a telephoto lens: four giant
+    // lines across the screen rather than a mesh.
     f = w * 0.714;
 
+    // Tall screens get a higher horizon so the ground claims more of the frame.
     var ratio = h / w;
     var horizon = Math.min(0.44, Math.max(0.34, 0.44 - (ratio - 0.6) * 0.07));
     cy = h * horizon;
 
+    // Then lift the camera until the nearest row falls past the bottom edge.
+    // Without this the plane stops short and leaves blank paper beneath it.
     EYE = Math.max(1.55, NEAR * (h - cy) / f * 1.04);
 
-    var zDeep = NEAR + ROWS * ZS * 0.85;
-    var reach = (w / 2) * zDeep / f;
+    // Widen the plane until it runs past both screen edges at the depth where
+    // the lines are still visible — otherwise a wide monitor sees the plane end.
+    var zDeep  = NEAR + ROWS * ZS * 0.85;
+    var reach  = (w / 2) * zDeep / f;   // world half-width needed at that depth
     COLS = Math.ceil((reach * 3.0) / XS);
     COLS = Math.max(narrow ? 20 : 28, Math.min(COLS, 90));
 
     var dpr = Math.min(window.devicePixelRatio || 1, narrow ? 1.75 : 2);
+    // Only the backing store is set here. Touching canvas.style.width would
+    // pin the box to a fixed pixel size and the next measurement would be stale.
     canvas.width  = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    if (!pointer.x && !pointer.y) {
-      pointer.x = pointer.tx = w / 2;
-      pointer.y = pointer.ty = h / 2;
-    }
-
     return true;
   }
 
+  // Height field — three slow waves, no two in step.
   function elevation(x, z, t) {
     return Math.sin(x * 0.42 + z * 0.18 + t * 0.33) * 0.30
          + Math.sin(z * 0.31 - t * 0.21)            * 0.22
          + Math.sin(x * 0.19 - z * 0.26 + t * 0.14) * 0.16;
   }
 
-  function lensLift(sx, sy) {
-    if (pointer.active < 0.001) return 0;
+  function draw(t) {
+    ctx.clearRect(0, 0, w, h);
 
-    var dx = sx - pointer.x;
-    var dy = sy - pointer.y;
-    var dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist >= LENS_RADIUS) return 0;
-
-    var n = 1 - dist / LENS_RADIUS;
-    /* Smooth, shallow lift. The terrain moves, but never enough to look rubbery. */
-    return n * n * 0.58 * pointer.active;
-  }
-
-  function projectPoint(x, z, t, scroll) {
-    var y0 = elevation(x, z + scroll, t);
-    var sx0 = cx + f * x / z;
-    var sy0 = cy + f * (EYE - y0) / z;
-    var y = y0 + lensLift(sx0, sy0);
-
-    return {
-      x: cx + f * x / z,
-      y: cy + f * (EYE - y) / z
-    };
-  }
-
-  function drawMesh(t, highlighted) {
     var scroll = t * SPEED;
-    var shift = scroll % ZS;
+    var shift  = scroll % ZS;
 
-    if (highlighted) {
-      /* Restrict this second pass to the circular survey lens. */
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(pointer.x, pointer.y, LENS_RADIUS, 0, Math.PI * 2);
-      ctx.clip();
+    // Depth fade for free: lines are faint at the horizon, firm underfoot.
+    var fade = ctx.createLinearGradient(0, cy, 0, h);
+    fade.addColorStop(0,    'rgba(22,41,44,0)');
+    fade.addColorStop(0.28, 'rgba(22,41,44,0.07)');
+    fade.addColorStop(1,    'rgba(22,41,44,0.26)');
+    ctx.strokeStyle = fade;
+    ctx.lineWidth = 1;
 
-      var lensFade = ctx.createRadialGradient(
-        pointer.x, pointer.y, 12,
-        pointer.x, pointer.y, LENS_RADIUS
-      );
-      lensFade.addColorStop(0,    'rgba(77,98,101,' + (0.48 * pointer.active) + ')');
-      lensFade.addColorStop(0.55, 'rgba(77,98,101,' + (0.28 * pointer.active) + ')');
-      lensFade.addColorStop(1,    'rgba(77,98,101,0)');
-      ctx.strokeStyle = lensFade;
-      ctx.lineWidth = 1.15;
-    } else {
-      var fade = ctx.createLinearGradient(0, cy, 0, h);
-      fade.addColorStop(0,    'rgba(22,41,44,0)');
-      fade.addColorStop(0.28, 'rgba(22,41,44,0.07)');
-      fade.addColorStop(1,    'rgba(22,41,44,0.26)');
-      ctx.strokeStyle = fade;
-      ctx.lineWidth = 1;
-    }
+    var i, j, x, z, y, sx, sy, open;
 
-    var i, j, x, z, p, open;
-
+    // Rows running across
     for (j = 0; j < ROWS; j++) {
       z = NEAR + j * ZS - shift;
       if (z < 0.4) continue;
       ctx.beginPath();
       for (i = 0; i <= COLS; i++) {
-        x = (i - COLS / 2) * XS;
-        p = projectPoint(x, z, t, scroll);
-        if (i) ctx.lineTo(p.x, p.y); else ctx.moveTo(p.x, p.y);
+        x  = (i - COLS / 2) * XS;
+        y  = elevation(x, z + scroll, t);
+        sx = cx + f * x / z;
+        sy = cy + f * (EYE - y) / z;
+        if (i) ctx.lineTo(sx, sy); else ctx.moveTo(sx, sy);
       }
       ctx.stroke();
     }
 
+    // Columns running away
     for (i = 0; i <= COLS; i++) {
       x = (i - COLS / 2) * XS;
       ctx.beginPath();
@@ -414,89 +377,20 @@
       for (j = 0; j < ROWS; j++) {
         z = NEAR + j * ZS - shift;
         if (z < 0.4) { open = false; continue; }
-        p = projectPoint(x, z, t, scroll);
-        if (open) ctx.lineTo(p.x, p.y);
-        else { ctx.moveTo(p.x, p.y); open = true; }
+        y  = elevation(x, z + scroll, t);
+        sx = cx + f * x / z;
+        sy = cy + f * (EYE - y) / z;
+        if (open) ctx.lineTo(sx, sy); else { ctx.moveTo(sx, sy); open = true; }
       }
       ctx.stroke();
     }
-
-    if (highlighted) ctx.restore();
-  }
-
-  function drawLens() {
-    if (pointer.active < 0.01) return;
-
-    ctx.save();
-
-    /* Soft inspection wash: it sharpens the lens without looking like a spotlight. */
-    var wash = ctx.createRadialGradient(
-      pointer.x, pointer.y, 0,
-      pointer.x, pointer.y, LENS_RADIUS
-    );
-    wash.addColorStop(0,    'rgba(77,98,101,' + (0.055 * pointer.active) + ')');
-    wash.addColorStop(0.62, 'rgba(77,98,101,' + (0.025 * pointer.active) + ')');
-    wash.addColorStop(1,    'rgba(77,98,101,0)');
-    ctx.fillStyle = wash;
-    ctx.beginPath();
-    ctx.arc(pointer.x, pointer.y, LENS_RADIUS, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.restore();
-  }
-
-  function drawPulses(t) {
-    if (!pulses.length) return;
-
-    ctx.save();
-    ctx.strokeStyle = '#4d6265';
-    ctx.lineWidth = 1;
-
-    for (var i = pulses.length - 1; i >= 0; i--) {
-      var pulse = pulses[i];
-      var age = t - pulse.start;
-      if (age > pulse.life) {
-        pulses.splice(i, 1);
-        continue;
-      }
-
-      var progress = age / pulse.life;
-      var eased = 1 - Math.pow(1 - progress, 3);
-      var fade = Math.pow(1 - progress, 1.7);
-
-      for (var ring = 0; ring < 3; ring++) {
-        var ringDelay = ring * 0.095;
-        var local = Math.max(0, Math.min(1, (progress - ringDelay) / (1 - ringDelay)));
-        if (local <= 0) continue;
-
-        var radius = 18 + (LENS_RADIUS * 1.42) * (1 - Math.pow(1 - local, 3));
-        ctx.globalAlpha = fade * (0.34 - ring * 0.065);
-        ctx.beginPath();
-        ctx.arc(pulse.x, pulse.y, radius, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-    }
-
-    ctx.restore();
-  }
-
-  function draw(t) {
-    ctx.clearRect(0, 0, w, h);
-
-    pointer.x += (pointer.tx - pointer.x) * 0.22;
-    pointer.y += (pointer.ty - pointer.y) * 0.22;
-    pointer.active += (pointer.target - pointer.active) * 0.14;
-
-    drawMesh(t, false);
-    if (pointer.active > 0.01) drawMesh(t, true);
-    drawPulses(t);
-    drawLens();
   }
 
   var elapsed = 0, last = 0;
 
   function frame(now) {
     if (!last) last = now;
+    // Clamp the step so returning to a backgrounded tab doesn't jump the terrain.
     elapsed += Math.min((now - last) / 1000, 0.05);
     last = now;
     draw(elapsed);
@@ -508,42 +402,19 @@
     last = 0;
     raf = window.requestAnimationFrame(frame);
   }
-
   function pause() {
     if (!raf) return;
     window.cancelAnimationFrame(raf);
     raf = 0;
   }
 
-  function setPointer(clientX, clientY, strength) {
-    pointer.tx = clientX;
-    pointer.ty = clientY;
-    pointer.target = strength;
-    pointer.visible = true;
-  }
-
-  function pulseAt(clientX, clientY) {
-    pulses.push({
-      x: clientX,
-      y: clientY,
-      start: elapsed,
-      life: 0.92
-    });
-    if (pulses.length > MAX_PULSES) pulses.shift();
-  }
-
-  var touchHideTimer = 0;
-
   function start() {
     resize();
-    if (still.matches) {
-      pause();
-      draw(elapsed);
-    } else {
-      play();
-    }
+    if (still.matches) { pause(); draw(elapsed); }
+    else play();
   }
 
+  // Phones fire resize constantly as the address bar slides; coalesce them.
   var pending = 0;
   function onResize() {
     window.clearTimeout(pending);
@@ -552,43 +423,6 @@
       if (changed && !raf) draw(elapsed);
     }, 140);
   }
-
-  window.addEventListener('pointermove', function (e) {
-    if (e.pointerType === 'mouse') {
-      setPointer(e.clientX, e.clientY, 1);
-    } else if (e.isPrimary) {
-      window.clearTimeout(touchHideTimer);
-      setPointer(e.clientX, e.clientY, 1);
-    }
-  }, { passive: true });
-
-  window.addEventListener('pointerdown', function (e) {
-    window.clearTimeout(touchHideTimer);
-    /* Touch should snap to the finger immediately. Mouse keeps a tiny elegant lag. */
-    if (e.pointerType !== 'mouse') {
-      pointer.x = e.clientX;
-      pointer.y = e.clientY;
-    }
-    setPointer(e.clientX, e.clientY, 1);
-    pulseAt(e.clientX, e.clientY);
-  }, { passive: true });
-
-  window.addEventListener('pointerup', function (e) {
-    if (e.pointerType !== 'mouse') {
-      pointer.target = 0.55;
-      touchHideTimer = window.setTimeout(function () {
-        pointer.target = 0;
-        pointer.visible = false;
-      }, 420);
-    }
-  }, { passive: true });
-
-  window.addEventListener('pointerleave', function (e) {
-    if (e.pointerType === 'mouse') {
-      pointer.target = 0;
-      pointer.visible = false;
-    }
-  }, { passive: true });
 
   window.addEventListener('resize', onResize, { passive: true });
   window.addEventListener('orientationchange', onResize, { passive: true });
