@@ -108,21 +108,13 @@
     border-bottom:1px solid var(--grid-bold);
     padding-bottom:10px;
   }
-  /* Wordmark is masked rather than inlined, so the colour still follows --ink
-     but no path data lives in this file. Needs btrmrk-wordmark.svg alongside,
-     served over http — a file:// page cannot load a mask. */
+  /* Plain <img>: no mask support needed, works over file:// too. The colour
+     lives in btrmrk-wordmark.svg (set to --ink) rather than in CSS. */
   .logotype{
     display:block;
     height:clamp(13px, 3.2vw, 19px);
-    aspect-ratio:2192.82 / 191.39;
+    width:auto;
     flex:0 0 auto;
-  }
-  @supports ((-webkit-mask-image:url('')) or (mask-image:url(''))){
-    .logotype{
-      background-color:var(--ink);
-      -webkit-mask:url("btrmrk-wordmark.svg") no-repeat center / contain;
-              mask:url("btrmrk-wordmark.svg") no-repeat center / contain;
-    }
   }
 
   /* ---------- centre stack ---------- */
@@ -237,7 +229,7 @@
 <div class="sheet">
 
   <div class="rail">
-    <span class="logotype" role="img" aria-label="BTRMRK"></span>
+    <img class="logotype" src="btrmrk-wordmark.svg" alt="BTRMRK" width="2193" height="191">
     <span>Under construction</span>
   </div>
 
